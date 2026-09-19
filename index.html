@@ -172,6 +172,15 @@
             }
         }
 
+        .focus-ring:focus-visible, button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 2px solid #C85A6A; outline-offset: 3px; }
+        body.theme-dark { background-color: #211f1c; color: #f5f2eb; }
+        body.theme-dark .bg-washi-50 { background-color: #292622 !important; }
+        body.theme-dark .bg-washi-100 { background-color: #332f2a !important; }
+        body.theme-dark .bg-washi-200, body.theme-dark .border-washi-200, body.theme-dark .border-washi-200\/60 { border-color: #514a40 !important; background-color: #403a33; }
+        body.theme-dark .text-washi-900 { color: #f5f2eb !important; }
+        body.theme-dark .text-washi-800 { color: #d4cbbd !important; }
+        body.theme-dark #splash-screen { background-color: #211f1c; }
+
         @keyframes subtitleReveal {
             0% {
                 opacity: 0;
@@ -224,11 +233,15 @@
                 <button onclick="openStoriesIndex()" class="hover:text-sakura transition-colors relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1px] after:bg-sakura hover:after:w-full after:transition-all">Stories</button>
                 <button onclick="openPoemsIndex()" class="hover:text-sakura transition-colors relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1px] after:bg-sakura hover:after:w-full after:transition-all">Poetry</button>
                 <button onclick="openNotesIndex()" class="hover:text-sakura transition-colors relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1px] after:bg-sakura hover:after:w-full after:transition-all">Reflections</button>
+                <button onclick="openAdmin()" class="hover:text-sakura transition-colors relative py-1">Manage</button>
             </div>
-            <!-- Mobile back navigation button -->
+            <div class="flex items-center gap-2">
+                <button id="theme-toggle" type="button" aria-label="Toggle dark mode" onclick="toggleTheme()" class="px-2 py-1 text-washi-800 hover:text-sakura" title="Toggle theme"><i class="fa-solid fa-moon"></i></button>
+                <!-- Mobile back navigation button -->
             <button id="mobile-back-btn" onclick="goBack()" class="md:hidden flex items-center space-x-1 px-3 py-1.5 rounded-sm bg-washi-200 text-washi-900 text-xs font-semibold uppercase tracking-wider hover:bg-sakura hover:text-white transition-all hidden">
                 <i class="fa-solid fa-chevron-left"></i> <span>Back</span>
             </button>
+            </div>
         </div>
     </nav>
 
@@ -529,6 +542,22 @@
             </div>
         </section>
 
+        <!-- 8. CONTENT STUDIO -->
+        <section id="admin-view" class="view-transition view-hidden space-y-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-washi-200 pb-6">
+                <div><p class="text-[10px] uppercase tracking-[0.25em] text-sakura font-semibold">Content studio</p><h2 class="text-3xl font-serif font-bold text-washi-900">Manage the archive</h2><p class="text-washi-800 text-xs mt-2">Drafts stay in this browser. Export a JSON copy whenever you like.</p></div>
+                <div class="flex flex-wrap gap-2"><button type="button" onclick="exportContent()" class="px-3 py-2 bg-washi-900 text-washi-50 text-[10px] uppercase tracking-widest rounded-sm">Export JSON</button><button type="button" onclick="document.getElementById('import-file').click()" class="px-3 py-2 border border-washi-300 text-[10px] uppercase tracking-widest rounded-sm">Import JSON</button><button type="button" onclick="resetContent()" class="px-3 py-2 border border-sakura text-sakura text-[10px] uppercase tracking-widest rounded-sm">Reset demo</button><input id="import-file" type="file" accept="application/json,.json" class="hidden" onchange="importContent(event)"></div>
+            </div>
+            <div id="admin-status" role="status" aria-live="polite" class="text-xs text-sakura min-h-[1.25rem]"></div>
+            <div class="grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-8">
+                <div class="space-y-4"><div class="flex items-center justify-between"><h3 class="font-serif text-xl text-washi-900">Your entries</h3><button type="button" onclick="newEntry()" class="text-xs text-sakura uppercase tracking-widest">+ New entry</button></div><div id="admin-entry-list" class="space-y-2"></div></div>
+                <form id="content-form" class="space-y-4 bg-washi-100 p-6 border border-washi-200 rounded-sm" onsubmit="saveEntry(event)">
+                    <input type="hidden" id="entry-id"><label class="block text-xs uppercase tracking-widest text-washi-800">Type<select id="entry-type" onchange="renderEditorFields()" class="mt-2 w-full p-2 bg-washi-50 border border-washi-200 rounded-sm"><option value="story">Story</option><option value="poem">Poem</option><option value="note">Reflection / note</option></select></label>
+                    <div id="editor-fields"></div><div class="flex gap-3 pt-2"><button class="px-4 py-2 bg-sakura text-white text-xs uppercase tracking-widest rounded-sm" type="submit">Save draft</button><button class="px-4 py-2 border border-washi-300 text-xs uppercase tracking-widest rounded-sm" type="button" onclick="newEntry()">Clear</button></div>
+                </form>
+            </div>
+        </section>
+
         <!-- 8. NOTE DETAIL VIEW -->
         <section id="note-detail-view" class="view-transition view-hidden max-w-xl mx-auto space-y-8">
             <div>
@@ -560,7 +589,7 @@
                 <span class="w-6 h-6 rounded-full bg-washi-200 text-washi-900 font-serif flex items-center justify-center text-[10px]">栞</span>
                 <span class="font-serif font-semibold tracking-widest text-washi-900">SHIORI © 2026</span>
             </div>
-            <p class="font-light text-center md:text-right uppercase text-[9px] tracking-widest">Wabi-Sabi minimalist digital repository. Quiet reading for focused minds.</p>
+            <div class="text-center md:text-right space-y-1"><p class="font-light uppercase text-[9px] tracking-widest">Wabi-Sabi minimalist digital repository. Quiet reading for focused minds.</p><p class="text-[10px] text-sakura">Client-only drafts stay in this browser ? Export from Manage Content to keep a copy.</p></div>
         </div>
     </footer>
 
@@ -569,7 +598,7 @@
         // 1. DATA REPOS (Fully customizable by editing below)
         // ==========================================================
 
-        const STORIES_DATA = [
+        let STORIES_DATA = [
             {
                 id: "story-1",
                 title: "The Sound of Wind Chimes",
@@ -603,7 +632,7 @@
             }
         ];
 
-        const POEMS_DATA = [
+        let POEMS_DATA = [
             {
                 id: "poem-1",
                 title: "Komorebi",
@@ -621,7 +650,7 @@
             }
         ];
 
-        const NOTES_DATA = [
+        let NOTES_DATA = [
             {
                 id: "note-1",
                 date: "11 June 2026",
@@ -637,6 +666,30 @@
         ];
 
 
+        const CONTENT_STORAGE_KEY = 'shiori-content-v1';
+        const SETTINGS_STORAGE_KEY = 'shiori-settings-v1';
+        const DEMO_CONTENT = { stories: STORIES_DATA, poems: POEMS_DATA, notes: NOTES_DATA };
+        let contentStore = null;
+        function clone(value) { return JSON.parse(JSON.stringify(value)); }
+        function normalizeContent(value) {
+            if (!value || typeof value !== 'object' || !Array.isArray(value.stories) || !Array.isArray(value.poems) || !Array.isArray(value.notes)) throw new Error('JSON must contain stories, poems, and notes arrays.');
+            const clean = { stories: value.stories, poems: value.poems, notes: value.notes };
+            clean.stories = clean.stories.map(s => { if (!s || !s.id || !s.title || !Array.isArray(s.chapters)) throw new Error('Every story needs an id, title, and chapters array.'); return { ...s, author: String(s.author || 'Shiori Scribe'), summary: String(s.summary || ''), tags: Array.isArray(s.tags) ? s.tags.map(String) : [], chapters: s.chapters.map((ch, i) => ({ id: String(ch.id || s.id + '-c' + (i + 1)), title: String(ch.title || 'Untitled chapter'), content: String(ch.content || '') })) }; });
+            clean.poems = clean.poems.map(x => { if (!x || !x.id || !x.title || typeof x.content !== 'string') throw new Error('Every poem needs an id, title, and content.'); return { ...x, title: String(x.title), tags: Array.isArray(x.tags) ? x.tags.map(String) : [] }; });
+            clean.notes = clean.notes.map(x => { if (!x || !x.id || !x.title || typeof x.content !== 'string') throw new Error('Every note needs an id, title, and content.'); return { ...x, title: String(x.title), date: String(x.date || ''), tags: Array.isArray(x.tags) ? x.tags.map(String) : [] }; });
+            return clean;
+        }
+        function persistContent() { localStorage.setItem(CONTENT_STORAGE_KEY, JSON.stringify({ version: 1, updatedAt: new Date().toISOString(), ...contentStore })); }
+        function loadContent() {
+            try { const saved = JSON.parse(localStorage.getItem(CONTENT_STORAGE_KEY) || 'null'); return saved ? normalizeContent(saved) : clone(DEMO_CONTENT); }
+            catch (error) { console.warn('Shiori content reset after invalid local data', error); return clone(DEMO_CONTENT); }
+        }
+        function syncData() { STORIES_DATA = contentStore.stories; POEMS_DATA = contentStore.poems; NOTES_DATA = contentStore.notes; }
+        function escapeHTML(value) { const div = document.createElement('div'); div.textContent = String(value ?? ''); return div.innerHTML; }
+        function makeId(prefix) { return prefix + '-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2,7); }
+        function settings() { try { return JSON.parse(localStorage.getItem(SETTINGS_STORAGE_KEY) || '{}'); } catch (_) { return {}; } }
+        function saveSettings(next) { localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify({ ...settings(), ...next })); }
+
         // ==========================================================
         // 2. VIEW NAVIGATION & STATE ENGINE (Integrated Splash Exit)
         // ==========================================================
@@ -646,6 +699,8 @@
         let readerFontSize = 17;
 
         window.onload = function() {
+            contentStore = loadContent(); syncData();
+            const savedSettings = settings(); readerFontSize = Number(savedSettings.readerFontSize) || 17; if (savedSettings.dark) { document.body.classList.add('theme-dark'); document.getElementById('theme-toggle').innerHTML = '<i class="fa-solid fa-sun"></i>'; }
             // Populate initial records
             renderStoriesGrid();
             renderPoemsGrid();
@@ -677,7 +732,7 @@
             const views = [
                 'home-view', 'stories-index-view', 'story-detail-view', 
                 'chapter-reading-view', 'poems-index-view', 'poem-reading-view', 
-                'notes-index-view', 'note-detail-view'
+                'notes-index-view', 'note-detail-view', 'admin-view'
             ];
 
             views.forEach(v => {
@@ -723,6 +778,28 @@
         }
 
 
+        function toggleTheme() { const dark = document.body.classList.toggle('theme-dark'); saveSettings({ dark }); document.getElementById('theme-toggle').innerHTML = dark ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>'; }
+        function openAdmin() { renderAdminList(); newEntry(); navigateTo('admin-view'); }
+        function setAdminStatus(message, error) { const el = document.getElementById('admin-status'); el.textContent = message; el.className = 'text-xs min-h-[1.25rem] ' + (error ? 'text-red-700' : 'text-sakura'); }
+        function renderAdminList() {
+            const list = document.getElementById('admin-entry-list'); list.textContent = '';
+            [['story','Stories',contentStore.stories],['poem','Poems',contentStore.poems],['note','Reflections',contentStore.notes]].forEach(([type,label,items]) => { const heading=document.createElement('p'); heading.className='text-[10px] uppercase tracking-widest text-sakura pt-3'; heading.textContent=label; list.appendChild(heading); items.forEach(item => { const row=document.createElement('div'); row.className='flex items-center justify-between gap-3 p-3 border border-washi-200 bg-washi-50 rounded-sm'; const title=document.createElement('button'); title.type='button'; title.className='text-left font-serif text-sm text-washi-900 truncate'; title.textContent=item.title; title.onclick=()=>editEntry(type,item.id); const del=document.createElement('button'); del.type='button'; del.className='text-xs text-sakura'; del.textContent='Delete'; del.onclick=()=>deleteEntry(type,item.id); row.append(title,del); list.appendChild(row); }); });
+        }
+        function renderEditorFields(entry) {
+            const type=document.getElementById('entry-type').value, f=document.getElementById('editor-fields'); f.textContent='';
+            const field=(id,label,value,area=false)=>{ const l=document.createElement('label'); l.className='block text-xs uppercase tracking-widest text-washi-800'; l.textContent=label; const el=document.createElement(area?'textarea':'input'); el.id=id; el.name=id; el.value=value||''; el.required=id==='edit-title'||id==='edit-content'; el.rows=area?7:1; el.className='mt-2 w-full p-2 bg-washi-50 border border-washi-200 rounded-sm text-sm normal-case tracking-normal'; l.appendChild(el); f.appendChild(l); };
+            field('edit-title','Title',entry?.title);
+            if(type==='story') { field('edit-author','Author',entry?.author||'Shiori Scribe'); field('edit-summary','Summary',entry?.summary,true); field('edit-tags','Tags (comma separated)',(entry?.tags||[]).join(', ')); const wrap=document.createElement('div'); wrap.id='chapter-editor'; wrap.className='space-y-3'; f.appendChild(wrap); (entry?.chapters||[{title:'',content:''}]).forEach(ch=>addChapterField(ch)); const add=document.createElement('button'); add.type='button'; add.className='text-xs text-sakura uppercase tracking-widest'; add.textContent='+ Add chapter'; add.onclick=()=>addChapterField(); f.appendChild(add); } else if(type==='note') { field('edit-date','Date',entry?.date || new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'})); field('edit-content','Entry',entry?.content,true); field('edit-tags','Tags (comma separated)',(entry?.tags||[]).join(', ')); } else { field('edit-content','Poem',entry?.content,true); field('edit-tags','Tags (comma separated)',(entry?.tags||[]).join(', ')); }
+        }
+        function addChapterField(ch={}) { const wrap=document.getElementById('chapter-editor'); if(!wrap)return; const box=document.createElement('div'); box.className='chapter-field border border-washi-200 p-3 space-y-2'; const title=document.createElement('input'); title.className='chapter-title w-full p-2 bg-washi-50 border border-washi-200 text-sm'; title.placeholder='Chapter title'; title.value=ch.title||''; const content=document.createElement('textarea'); content.className='chapter-content w-full p-2 bg-washi-50 border border-washi-200 text-sm'; content.rows=4; content.placeholder='Chapter text'; content.value=ch.content||''; const remove=document.createElement('button'); remove.type='button'; remove.className='text-[10px] text-sakura uppercase tracking-widest'; remove.textContent='Remove chapter'; remove.onclick=()=>box.remove(); box.append(title,content,remove); wrap.appendChild(box); }
+        function newEntry() { document.getElementById('entry-id').value=''; document.getElementById('entry-type').value='story'; renderEditorFields(); }
+        function editEntry(type,id) { const source=type==='story'?contentStore.stories:type==='poem'?contentStore.poems:contentStore.notes; const entry=source.find(x=>x.id===id); document.getElementById('entry-id').value=id; document.getElementById('entry-type').value=type; renderEditorFields(entry); }
+        function saveEntry(event) { event.preventDefault(); const type=document.getElementById('entry-type').value, id=document.getElementById('entry-id').value || makeId(type); let entry={id,title:document.getElementById('edit-title').value.trim()}; if(!entry.title){setAdminStatus('A title is required.',true);return;} if(type==='story'){ entry.author=document.getElementById('edit-author').value.trim(); entry.summary=document.getElementById('edit-summary').value.trim(); entry.tags=(document.getElementById('edit-tags').value||'').split(',').map(x=>x.trim()).filter(Boolean); entry.chapters=[...document.querySelectorAll('.chapter-field')].map((box,i)=>({id:id+'-c'+(i+1),title:box.querySelector('.chapter-title').value.trim()||'Untitled chapter',content:box.querySelector('.chapter-content').value})); if(!entry.chapters.length){setAdminStatus('Add at least one chapter.',true);return;} } else { entry.content=document.getElementById('edit-content').value; entry.tags=(document.getElementById('edit-tags').value||'').split(',').map(x=>x.trim()).filter(Boolean); if(type==='note') entry.date=document.getElementById('edit-date').value.trim(); } const target=type==='story'?contentStore.stories:type==='poem'?contentStore.poems:contentStore.notes; const index=target.findIndex(x=>x.id===id); if(index>=0) target[index]=entry; else target.push(entry); syncData(); persistContent(); renderAdminList(); renderStoriesGrid(); renderPoemsGrid(); renderNotesGrid(); setAdminStatus('Draft saved locally.'); document.getElementById('entry-id').value=id; }
+        function deleteEntry(type,id) { if(!confirm('Delete this entry from local drafts?'))return; const target=type==='story'?contentStore.stories:type==='poem'?contentStore.poems:contentStore.notes; const index=target.findIndex(x=>x.id===id); if(index>=0)target.splice(index,1); syncData(); persistContent(); renderAdminList(); renderStoriesGrid(); renderPoemsGrid(); renderNotesGrid(); setAdminStatus('Entry deleted locally.'); }
+        function exportContent() { const blob=new Blob([JSON.stringify({version:1,exportedAt:new Date().toISOString(),...contentStore},null,2)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='shiori-content.json'; a.click(); URL.revokeObjectURL(a.href); setAdminStatus('JSON export downloaded.'); }
+        function importContent(event) { const file=event.target.files[0]; if(!file)return; const reader=new FileReader(); reader.onload=()=>{ try{const imported=normalizeContent(JSON.parse(reader.result)); contentStore=imported; syncData(); persistContent(); renderAdminList(); renderStoriesGrid(); renderPoemsGrid(); renderNotesGrid(); setAdminStatus('Import complete. Drafts are stored in this browser.');}catch(error){setAdminStatus('Import failed: '+error.message,true);} event.target.value=''; }; reader.readAsText(file); }
+        function resetContent() { if(!confirm('Reset all local drafts to the original demo data?'))return; contentStore=clone(DEMO_CONTENT); syncData(); persistContent(); renderAdminList(); renderStoriesGrid(); renderPoemsGrid(); renderNotesGrid(); newEntry(); setAdminStatus('Demo data restored.'); }
+
         // ==========================================================
         // 3. STORY ARCHIVE LOGIC
         // ==========================================================
@@ -751,8 +828,8 @@
                             <span class="text-[9px] font-sans font-semibold uppercase tracking-widest text-sakura"><i class="fa-solid fa-layer-group mr-1"></i> Volume</span>
                             <span class="text-[9px] bg-washi-200 text-washi-900 px-2.5 py-1 rounded-sm font-semibold uppercase tracking-wider">${story.chapters.length} Chapters</span>
                         </div>
-                        <h3 class="text-xl font-serif font-bold text-washi-900 group-hover:text-sakura transition-colors">${story.title}</h3>
-                        <p class="text-washi-800 text-xs leading-relaxed line-clamp-3 font-sans">${story.summary}</p>
+                        <h3 class="text-xl font-serif font-bold text-washi-900 group-hover:text-sakura transition-colors">${escapeHTML(story.title)}</h3>
+                        <p class="text-washi-800 text-xs leading-relaxed line-clamp-3 font-sans">${escapeHTML(story.summary)}</p>
                     </div>
                     <div class="flex items-center space-x-2 text-sakura font-semibold text-xs uppercase tracking-widest pt-6 group-hover:translate-x-1 transition-transform">
                         <span>Unroll Scroll</span> <i class="fa-solid fa-arrow-right"></i>
@@ -794,7 +871,7 @@
                 chRow.innerHTML = `
                     <div class="flex items-center space-x-4">
                         <span class="w-7 h-7 rounded-full bg-sakura/10 text-sakura flex items-center justify-center font-bold text-xs group-hover:bg-sakura group-hover:text-white transition-all">${index + 1}</span>
-                        <h4 class="font-serif font-bold text-washi-900 text-base group-hover:text-sakura transition-colors">${chapter.title}</h4>
+                        <h4 class="font-serif font-bold text-washi-900 text-base group-hover:text-sakura transition-colors">${escapeHTML(chapter.title)}</h4>
                     </div>
                     <span class="text-xs uppercase tracking-widest text-sakura font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center space-x-1">
                         <span>Read</span> <i class="fa-solid fa-angle-right"></i>
@@ -868,13 +945,14 @@
                 nextBtn.onclick = () => openStoryDetail(storyId);
             }
 
-            document.getElementById('chapter-back-text').innerText = `${story.title}`;
+            document.getElementById('chapter-back-text').innerText = story.title;
 
             navigateTo('chapter-reading-view');
         }
 
         function adjustReaderFontSize(change) {
             readerFontSize = Math.min(Math.max(13, readerFontSize + change), 26);
+            saveSettings({ readerFontSize });
             
             // Scaling up / down readers
             const chapterContent = document.getElementById('chapter-reading-content');
@@ -918,7 +996,7 @@
                 card.innerHTML = `
                     <div class="space-y-3">
                         <div class="text-sakura text-xs tracking-wider font-semibold font-sans">詩 / UTA</div>
-                        <h3 class="text-lg font-serif font-bold text-washi-900 group-hover:text-sakura transition-colors line-clamp-2">${poem.title}</h3>
+                        <h3 class="text-lg font-serif font-bold text-washi-900 group-hover:text-sakura transition-colors line-clamp-2">${escapeHTML(poem.title)}</h3>
                     </div>
                     <div class="text-[10px] text-washi-800 uppercase tracking-widest font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
                         <span>Read Verse</span> <i class="fa-solid fa-arrow-right-long text-sakura text-[9px]"></i>
@@ -977,9 +1055,9 @@
 
                 card.innerHTML = `
                     <div class="space-y-3">
-                        <span class="text-[9px] uppercase font-bold tracking-widest text-sakura"><i class="fa-regular fa-calendar-check mr-1"></i> ${note.date}</span>
-                        <h3 class="text-lg font-serif font-semibold text-washi-900 line-clamp-2">${note.title}</h3>
-                        <p class="text-washi-800 text-xs leading-relaxed line-clamp-3 font-sans">${note.content}</p>
+                        <span class="text-[9px] uppercase font-bold tracking-widest text-sakura"><i class="fa-regular fa-calendar-check mr-1"></i> ${escapeHTML(note.date)}</span>
+                        <h3 class="text-lg font-serif font-semibold text-washi-900 line-clamp-2">${escapeHTML(note.title)}</h3>
+                        <p class="text-washi-800 text-xs leading-relaxed line-clamp-3 font-sans">${escapeHTML(note.content)}</p>
                     </div>
                     <div class="text-[10px] text-sakura font-semibold uppercase tracking-widest flex items-center gap-1">
                         <span>Examine log</span> <i class="fa-solid fa-angle-right text-[9px]"></i>
