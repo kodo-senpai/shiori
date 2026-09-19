@@ -1,8 +1,1009 @@
-<html>
-  <head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shiori - Minimalist Literary Journal</title>
     
-  </head>
-  <body>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Noto+Serif+JP:wght@300;400;600;700&display=swap" rel="stylesheet">
     
-  </body>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        washi: {
+                            50: '#FCFAF2',   /* Classic warm washi paper base */
+                            100: '#F5F2EB',  /* Slightly textured secondary back */
+                            200: '#EAE5D9',  /* Soft border cream */
+                            300: '#DBD3C3',  /* Selected element accent */
+                            800: '#4E4941',  /* Deep warm charcoal */
+                            900: '#2A2724',  /* Matte ink charcoal */
+                        },
+                        sakura: {
+                            DEFAULT: '#C85A6A', /* Delicate muted cherry blossom pink-red */
+                            dark: '#A64351',
+                            light: '#E5A5B0'
+                        },
+                        sumi: '#1C1C1C'      /* Traditional sumi ink */
+                    },
+                    fontFamily: {
+                        serif: ['"Noto Serif JP"', '"Cinzel"', 'Georgia', 'serif'],
+                        sans: ['"Inter"', 'sans-serif'],
+                        reader: ['"Noto Serif JP"', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FCFAF2;
+            color: #2A2724;
+            scroll-behavior: smooth;
+        }
+        
+        /* Smooth, non-laggy transitions */
+        .view-transition {
+            transition: opacity 350ms cubic-bezier(0.25, 0.1, 0.25, 1), transform 350ms cubic-bezier(0.25, 0.1, 0.25, 1);
+        }
+        .view-hidden {
+            opacity: 0;
+            transform: translateY(12px);
+            pointer-events: none;
+            position: absolute;
+            width: 100%;
+        }
+        .view-visible {
+            opacity: 1;
+            transform: translateY(0);
+            position: relative;
+        }
+
+        /* Minimalist scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FCFAF2;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #EAE5D9;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #C85A6A;
+        }
+
+        /* PREMIUM OPENING SPLASH ANIMATION KEYFRAMES */
+        .splash-fade-out {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 1000ms cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        /* Hanko stamp organic stamp-in */
+        .splash-hanko-bg {
+            animation: stampIn 1.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            transform: scale(0.1);
+            opacity: 0;
+        }
+
+        /* Kanji sumi-like soft reveal */
+        .splash-kanji {
+            animation: kanjiFade 1.8s ease-in-out 0.4s forwards;
+            opacity: 0;
+            filter: blur(4px);
+        }
+
+        /* Title text tracking-out slide-up */
+        .splash-title {
+            animation: titleFadeUp 2s cubic-bezier(0.16, 1, 0.3, 1) 0.6s forwards;
+            opacity: 0;
+            transform: translateY(18px);
+        }
+
+        /* Thin dividers stretch */
+        .splash-line {
+            animation: lineStretch 1.6s cubic-bezier(0.16, 1, 0.3, 1) 1.2s forwards;
+            width: 0;
+        }
+
+        /* Subtitle slow reveal */
+        .splash-subtitle {
+            animation: subtitleReveal 2.2s cubic-bezier(0.16, 1, 0.3, 1) 1s forwards;
+            opacity: 0;
+            transform: translateY(8px);
+        }
+
+        @keyframes stampIn {
+            0% {
+                transform: scale(0.2) rotate(-12deg);
+                opacity: 0;
+                filter: drop-shadow(0 0 10px rgba(200, 90, 106, 0.4));
+            }
+            50% {
+                opacity: 0.9;
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+                filter: drop-shadow(0 6px 15px rgba(200, 90, 106, 0.15));
+            }
+        }
+
+        @keyframes kanjiFade {
+            0% {
+                opacity: 0;
+                filter: blur(3px) scale(0.85);
+            }
+            100% {
+                opacity: 1;
+                filter: blur(0px) scale(1);
+            }
+        }
+
+        @keyframes titleFadeUp {
+            0% {
+                opacity: 0;
+                transform: translateY(18px);
+                letter-spacing: 0.1em;
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+                letter-spacing: 0.4em;
+            }
+        }
+
+        @keyframes lineStretch {
+            0% {
+                width: 0%;
+            }
+            100% {
+                width: 60px;
+            }
+        }
+
+        @keyframes subtitleReveal {
+            0% {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            100% {
+                opacity: 0.7;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body class="bg-washi-50 text-washi-900 selection:bg-sakura/15 selection:text-sakura-dark min-h-screen flex flex-col justify-between">
+
+    <!-- ELEGANT SPLASH OPENING OVERLAY -->
+    <div id="splash-screen" class="fixed inset-0 z-[9999] bg-washi-50 flex flex-col items-center justify-center overflow-hidden">
+        <!-- Soft organic ambient paper overlay -->
+        <div class="absolute inset-0 bg-washi-100/20 mix-blend-multiply pointer-events-none"></div>
+        
+        <div class="relative flex flex-col items-center text-center space-y-8 px-6">
+            <!-- Hanko Stamp Symbol Container -->
+            <div class="relative flex items-center justify-center">
+                <!-- Outer subtle ring -->
+                <div class="absolute inset-[-10px] rounded-full border border-dashed border-sakura/20 animate-[spin_40s_linear_infinite]"></div>
+                <!-- Red Ink Stamp Circle -->
+                <div class="splash-hanko-bg w-24 h-24 rounded-full bg-sakura flex items-center justify-center shadow-lg">
+                    <span class="splash-kanji font-serif text-white text-4xl select-none">栞</span>
+                </div>
+            </div>
+            
+            <!-- Literary Branding Reveal -->
+            <div class="space-y-3">
+                <h1 class="splash-title font-serif text-3xl md:text-4xl font-semibold tracking-[0.4em] text-washi-900 ml-[0.4em]">SHIORI</h1>
+                <div class="splash-line h-[1px] bg-sakura mx-auto"></div>
+                <p class="splash-subtitle text-[10px] tracking-[0.25em] text-washi-800 uppercase font-sans font-light">Minimalist Digital Repository</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN NAVBAR -->
+    <nav class="sticky top-0 z-50 backdrop-blur-md bg-washi-50/80 border-b border-washi-200 py-5 px-6 md:px-12 transition-all duration-300">
+        <div class="max-w-5xl mx-auto flex justify-between items-center">
+            <a href="#" onclick="navigateTo('home-view')" class="flex items-center space-x-3 text-2xl font-serif font-bold tracking-wider text-washi-900 hover:text-sakura transition-colors">
+                <!-- Red Hanko Stamp style icon -->
+                <span class="w-8 h-8 rounded-full bg-sakura text-white font-serif flex items-center justify-center text-sm shadow-sm">栞</span>
+                <span class="tracking-widest">SHIORI</span>
+            </a>
+            <div class="hidden md:flex space-x-8 font-sans text-xs tracking-widest uppercase font-medium">
+                <button onclick="navigateTo('home-view')" class="hover:text-sakura transition-colors relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1px] after:bg-sakura hover:after:w-full after:transition-all">Home</button>
+                <button onclick="openStoriesIndex()" class="hover:text-sakura transition-colors relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1px] after:bg-sakura hover:after:w-full after:transition-all">Stories</button>
+                <button onclick="openPoemsIndex()" class="hover:text-sakura transition-colors relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1px] after:bg-sakura hover:after:w-full after:transition-all">Poetry</button>
+                <button onclick="openNotesIndex()" class="hover:text-sakura transition-colors relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1px] after:bg-sakura hover:after:w-full after:transition-all">Reflections</button>
+            </div>
+            <!-- Mobile back navigation button -->
+            <button id="mobile-back-btn" onclick="goBack()" class="md:hidden flex items-center space-x-1 px-3 py-1.5 rounded-sm bg-washi-200 text-washi-900 text-xs font-semibold uppercase tracking-wider hover:bg-sakura hover:text-white transition-all hidden">
+                <i class="fa-solid fa-chevron-left"></i> <span>Back</span>
+            </button>
+        </div>
+    </nav>
+
+    <main class="flex-grow max-w-5xl w-full mx-auto px-6 md:px-12 py-10 relative">
+
+        <!-- 1. HOME VIEW -->
+        <section id="home-view" class="view-transition view-visible space-y-20">
+            
+            <!-- Hero Layout -->
+            <div class="flex flex-col-reverse md:flex-row items-center justify-between py-10 md:py-16 gap-12">
+                <div class="w-full md:w-3/5 space-y-6 text-center md:text-left">
+                    <span class="inline-block border border-washi-300 text-washi-800 text-[10px] tracking-widest font-semibold px-4 py-1.5 uppercase rounded-sm">木漏れ日 — Komorebi</span>
+                    <h1 class="text-4xl md:text-6xl font-serif font-semibold text-washi-900 leading-tight">
+                        Woven Thoughts <br>
+                        <span class="text-sakura italic font-light">&amp; Quiet Spaces</span>
+                    </h1>
+                    <p class="text-washi-800 text-sm md:text-base max-w-md leading-relaxed font-light font-sans">
+                        A clean, minimalist archive of serialized stories, haiku sequences, and small quiet realizations. Hand-recorded and organized with intent.
+                    </p>
+                    <div class="flex flex-col sm:flex-row items-center justify-center md:justify-start gap-4 pt-4">
+                        <a href="#categories-nav" class="w-full sm:w-auto px-8 py-3.5 bg-washi-900 text-washi-50 rounded-sm text-xs tracking-widest uppercase font-medium shadow-sm hover:bg-sakura transition-all transform hover:-translate-y-0.5 text-center flex items-center justify-center gap-2">
+                            Enter the Archives <i class="fa-solid fa-angle-right text-[10px]"></i>
+                        </a>
+                        <button onclick="scrollToCategories()" class="w-full sm:w-auto px-8 py-3.5 bg-transparent border border-washi-300 hover:bg-washi-200 text-washi-900 rounded-sm text-xs tracking-widest uppercase font-medium transition-all text-center">
+                            Browse Index
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="w-full md:w-2/5 flex justify-center">
+                    <!-- Elegant Japanese Minimalist Enso/Crane Illustration -->
+                    <div class="relative w-56 h-56 md:w-72 md:h-72 bg-washi-100 rounded-full flex items-center justify-center border border-washi-200/50">
+                        <div class="absolute inset-4 rounded-full border border-dashed border-washi-300/60 flex items-center justify-center">
+                            <!-- Japanese Origami Crane Vector Motif -->
+                            <svg class="w-28 h-28 text-sakura opacity-80" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M50 20 L65 55 L35 55 Z"/>
+                                <path d="M50 20 L80 40 L65 55"/>
+                                <path d="M50 20 L20 40 L35 55"/>
+                                <path d="M50 75 L65 55 L35 55 Z"/>
+                                <path d="M20 40 L10 50 L35 55"/>
+                                <path d="M80 40 L90 50 L65 55"/>
+                                <path d="M50 75 L50 90 L40 95"/>
+                            </svg>
+                        </div>
+                        <div class="absolute -bottom-3 -right-3 bg-washi-50 px-4 py-2 border border-washi-200 rounded-sm flex items-center space-x-2">
+                            <span class="w-2 h-2 rounded-full bg-sakura animate-ping"></span>
+                            <span class="text-[9px] uppercase tracking-wider font-semibold font-sans text-washi-800">50+ Works Cached</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Category Section Links -->
+            <div id="categories-nav" class="space-y-10 pt-16 border-t border-washi-200/60">
+                <div class="text-center max-w-lg mx-auto space-y-2">
+                    <h2 class="text-2xl font-serif font-bold tracking-wider text-washi-900">ARCHIVE SECTIONS</h2>
+                    <p class="text-washi-800 text-xs font-sans tracking-widest uppercase">Select your path of reading</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Monogatari / Stories Card -->
+                    <div onclick="openStoriesIndex()" class="group cursor-pointer bg-washi-50 hover:bg-washi-100 p-8 rounded-sm border border-washi-200 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between h-72">
+                        <div class="space-y-4">
+                            <div class="text-sakura group-hover:text-washi-900 transition-colors font-serif text-lg tracking-widest font-semibold border-b border-washi-200 pb-2">
+                                01 / 物語
+                            </div>
+                            <h3 class="text-xl font-serif font-semibold text-washi-900 group-hover:text-sakura transition-colors">Stories</h3>
+                            <p class="text-washi-800 text-xs leading-relaxed font-sans">Multi-chapter stories and atmospheric sagas complete with comprehensive summaries and character profiles.</p>
+                        </div>
+                        <div class="flex items-center space-x-2 text-sakura font-sans text-xs uppercase tracking-widest font-semibold group-hover:translate-x-1.5 transition-transform">
+                            <span>Read chapters</span> <i class="fa-solid fa-chevron-right text-[9px]"></i>
+                        </div>
+                    </div>
+
+                    <!-- Uta / Poems Card -->
+                    <div onclick="openPoemsIndex()" class="group cursor-pointer bg-washi-50 hover:bg-washi-100 p-8 rounded-sm border border-washi-200 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between h-72">
+                        <div class="space-y-4">
+                            <div class="text-sakura group-hover:text-washi-900 transition-colors font-serif text-lg tracking-widest font-semibold border-b border-washi-200 pb-2">
+                                02 / 詩歌
+                            </div>
+                            <h3 class="text-xl font-serif font-semibold text-washi-900 group-hover:text-sakura transition-colors">Haiku &amp; Poems</h3>
+                            <p class="text-washi-800 text-xs leading-relaxed font-sans">Brief captures of seasons, fleeting visual frames, and expressive free verse arranged visually.</p>
+                        </div>
+                        <div class="flex items-center space-x-2 text-sakura font-sans text-xs uppercase tracking-widest font-semibold group-hover:translate-x-1.5 transition-transform">
+                            <span>Browse poems</span> <i class="fa-solid fa-chevron-right text-[9px]"></i>
+                        </div>
+                    </div>
+
+                    <!-- Zuihitsu / Notes Card -->
+                    <div onclick="openNotesIndex()" class="group cursor-pointer bg-washi-50 hover:bg-washi-100 p-8 rounded-sm border border-washi-200 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between h-72">
+                        <div class="space-y-4">
+                            <div class="text-sakura group-hover:text-washi-900 transition-colors font-serif text-lg tracking-widest font-semibold border-b border-washi-200 pb-2">
+                                03 / 随筆
+                            </div>
+                            <h3 class="text-xl font-serif font-semibold text-washi-900 group-hover:text-sakura transition-colors">Zen Reflections</h3>
+                            <p class="text-washi-800 text-xs leading-relaxed font-sans">Daily logs, observations on simple elements, quiet philosophy, and personal wabi-sabi findings.</p>
+                        </div>
+                        <div class="flex items-center space-x-2 text-sakura font-sans text-xs uppercase tracking-widest font-semibold group-hover:translate-x-1.5 transition-transform">
+                            <span>Open journal</span> <i class="fa-solid fa-chevron-right text-[9px]"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Zen Quote -->
+            <div class="border-t border-b border-washi-200/60 py-10 text-center max-w-3xl mx-auto space-y-4">
+                <p class="text-lg md:text-xl font-serif italic text-washi-800 leading-relaxed px-4">
+                    "Wabi-Sabi: Nourish the self in quiet simplicity, find peace in the imperfect cycle of natural growth."
+                </p>
+                <div class="w-8 h-[1px] bg-sakura mx-auto"></div>
+                <p class="text-[9px] tracking-widest uppercase font-semibold text-washi-800 font-sans">— The Scroll of Calm</p>
+            </div>
+        </section>
+
+        <!-- 2. STORIES INDEX VIEW -->
+        <section id="stories-index-view" class="view-transition view-hidden space-y-8">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-washi-200 pb-6">
+                <div>
+                    <button onclick="navigateTo('home-view')" class="text-xs text-sakura font-sans uppercase tracking-widest font-medium hover:underline mb-2 inline-flex items-center space-x-1">
+                        <i class="fa-solid fa-chevron-left text-[9px]"></i> <span>Main Scroll</span>
+                    </button>
+                    <h2 class="text-3xl font-serif font-bold text-washi-900">MONOGATARI / STORIES</h2>
+                    <p class="text-washi-800 text-xs">Choose a narrative scroll from the collection below.</p>
+                </div>
+                <!-- Simple Elegant Search -->
+                <div class="relative w-full md:w-64">
+                    <input type="text" id="story-search" oninput="filterStories()" placeholder="Search archive..." class="w-full pl-9 pr-4 py-2 bg-washi-50 border border-washi-200 rounded-sm text-xs text-washi-900 placeholder-washi-800 focus:outline-none focus:ring-[1px] focus:ring-sakura transition-all">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-washi-800 text-[10px]"></i>
+                </div>
+            </div>
+
+            <div id="stories-grid" class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Javascript dynamically paints content cards -->
+            </div>
+        </section>
+
+        <!-- 3. STORY DETAIL VIEW -->
+        <section id="story-detail-view" class="view-transition view-hidden space-y-8">
+            <div class="border-b border-washi-200 pb-6">
+                <button onclick="navigateTo('stories-index-view')" class="text-xs text-sakura font-sans uppercase tracking-widest font-medium hover:underline mb-2 inline-flex items-center space-x-1">
+                    <i class="fa-solid fa-chevron-left text-[9px]"></i> <span>Back to Index</span>
+                </button>
+                <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mt-2">
+                    <div class="space-y-1">
+                        <h2 id="story-detail-title" class="text-3xl md:text-5xl font-serif font-semibold text-washi-900">Story Title</h2>
+                        <p class="text-washi-800 text-xs tracking-wider uppercase" id="story-detail-meta"><i class="fa-regular fa-bookmark"></i> Serialized Volume</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab bar layout -->
+            <div class="flex border-b border-washi-200">
+                <button id="tab-summary-btn" onclick="switchStoryTab('summary')" class="px-6 py-3 font-serif font-medium border-b border-sakura text-sakura focus:outline-none transition-all">
+                    Summary / 梗概
+                </button>
+                <button id="tab-chapters-btn" onclick="switchStoryTab('chapters')" class="px-6 py-3 font-serif font-medium border-b border-transparent text-washi-800 hover:text-washi-900 hover:border-washi-300 focus:outline-none transition-all">
+                    Chapters / 目次
+                </button>
+            </div>
+
+            <!-- Tab 1: Story Summary View -->
+            <div id="story-summary-container" class="space-y-6">
+                <div class="bg-washi-100 p-6 md:p-8 rounded-sm border border-washi-200 shadow-sm leading-relaxed text-washi-800 max-w-4xl space-y-4">
+                    <h3 class="text-base tracking-wider uppercase font-semibold text-washi-900 font-sans border-b border-washi-200 pb-2">Overview of the Tale</h3>
+                    <p id="story-summary-text" class="text-base font-light font-reader whitespace-pre-line">
+                        Summary content...
+                    </p>
+                </div>
+                <div class="pt-2">
+                    <button onclick="switchStoryTab('chapters')" class="px-6 py-3 bg-washi-900 text-washi-50 rounded-sm hover:bg-sakura text-xs tracking-widest uppercase transition-all inline-flex items-center space-x-2">
+                        <span>Begin Reading Chapters</span> <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tab 2: Story Chapters List -->
+            <div id="story-chapters-container" class="hidden space-y-6">
+                <h3 class="text-sm tracking-widest uppercase font-semibold text-washi-900 font-sans">Chapter Directory</h3>
+                <div id="chapters-list" class="space-y-3 max-w-2xl">
+                    <!-- Loaded dynamically via JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. CHAPTER READING VIEW -->
+        <section id="chapter-reading-view" class="view-transition view-hidden max-w-2xl mx-auto space-y-8">
+            <div class="flex items-center justify-between border-b border-washi-200 pb-4">
+                <button id="chapter-back-btn" onclick="navigateTo('story-detail-view')" class="text-xs text-sakura font-sans uppercase tracking-widest font-semibold hover:underline inline-flex items-center space-x-1">
+                    <i class="fa-solid fa-chevron-left text-[9px]"></i> <span id="chapter-back-text">Back</span>
+                </button>
+                
+                <!-- Simple size controllers -->
+                <div class="flex items-center space-x-3 bg-washi-200/50 px-3 py-1 rounded-sm text-[10px] font-sans font-semibold">
+                    <span class="text-washi-800 uppercase tracking-wider">Size:</span>
+                    <button onclick="adjustReaderFontSize(-1)" class="p-1 hover:text-sakura transition-colors" title="Smaller font">A-</button>
+                    <span id="font-size-indicator" class="px-1 text-sakura">17px</span>
+                    <button onclick="adjustReaderFontSize(1)" class="p-1 hover:text-sakura transition-colors" title="Larger font">A+</button>
+                </div>
+            </div>
+
+            <div class="text-center space-y-3">
+                <h4 id="chapter-reading-story-title" class="text-[10px] uppercase tracking-widest text-sakura font-semibold font-sans">VOLUME NAME</h4>
+                <h2 id="chapter-reading-title" class="text-3xl font-serif font-bold text-washi-900">Chapter Title</h2>
+                <div class="w-12 h-[1px] bg-washi-300 mx-auto"></div>
+            </div>
+
+            <!-- Reader Article Section -->
+            <article id="chapter-reading-content" class="font-reader text-lg leading-loose text-washi-900 space-y-8 whitespace-pre-line px-2 md:px-4 font-light">
+                <!-- Injected Chapter text -->
+            </article>
+
+            <!-- Bottom minimal control panel -->
+            <div class="flex items-center justify-between border-t border-washi-200 pt-8 mt-12">
+                <button id="prev-chapter-btn" class="px-4 py-2 text-xs uppercase tracking-widest font-semibold bg-washi-200 text-washi-900 hover:bg-sakura hover:text-white transition-all inline-flex items-center gap-2">
+                    <i class="fa-solid fa-chevron-left text-[9px]"></i> Previous
+                </button>
+                <button id="next-chapter-btn" class="px-4 py-2 text-xs uppercase tracking-widest font-semibold bg-washi-900 text-washi-50 hover:bg-sakura hover:text-white transition-all inline-flex items-center gap-2">
+                    Next <i class="fa-solid fa-chevron-right text-[9px]"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- 5. POEMS INDEX VIEW -->
+        <section id="poems-index-view" class="view-transition view-hidden space-y-8">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-washi-200 pb-6">
+                <div>
+                    <button onclick="navigateTo('home-view')" class="text-xs text-sakura font-sans uppercase tracking-widest font-medium hover:underline mb-2 inline-flex items-center space-x-1">
+                        <i class="fa-solid fa-chevron-left text-[9px]"></i> <span>Main Scroll</span>
+                    </button>
+                    <h2 class="text-3xl font-serif font-bold text-washi-900">UTA / POETRY SEQUENCE</h2>
+                    <p class="text-washi-800 text-xs">Fleeting captures and traditional haiku verses framed cleanly.</p>
+                </div>
+                <!-- Clean Search for poems -->
+                <div class="relative w-full md:w-64">
+                    <input type="text" id="poem-search" oninput="filterPoems()" placeholder="Filter collections..." class="w-full pl-9 pr-4 py-2 bg-washi-50 border border-washi-200 rounded-sm text-xs text-washi-900 placeholder-washi-800 focus:outline-none focus:ring-[1px] focus:ring-sakura transition-all">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-washi-800 text-[10px]"></i>
+                </div>
+            </div>
+
+            <div id="poems-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                <!-- Javascript dynamically lists poem entries -->
+            </div>
+        </section>
+
+        <!-- 6. POEM READING VIEW -->
+        <section id="poem-reading-view" class="view-transition view-hidden max-w-xl mx-auto space-y-12">
+            <div class="flex items-center justify-between border-b border-washi-200 pb-4">
+                <button onclick="navigateTo('poems-index-view')" class="text-xs text-sakura font-sans uppercase tracking-widest font-semibold hover:underline inline-flex items-center space-x-1">
+                    <i class="fa-solid fa-chevron-left text-[9px]"></i> <span>Back to Poetry Index</span>
+                </button>
+                <div class="flex items-center space-x-3 bg-washi-200/50 px-3 py-1 rounded-sm text-[10px] font-sans font-semibold">
+                    <span class="text-washi-800 uppercase tracking-wider">Size:</span>
+                    <button onclick="adjustReaderFontSize(-1)" class="p-1 hover:text-sakura transition-colors text-sm">A-</button>
+                    <span id="poem-font-size-indicator" class="px-1 text-sakura">19px</span>
+                    <button onclick="adjustReaderFontSize(1)" class="p-1 hover:text-sakura transition-colors text-sm">A+</button>
+                </div>
+            </div>
+
+            <!-- Zen Frame Design with Bamboo minimalist vibes -->
+            <div class="text-center space-y-8 bg-washi-100 p-8 md:p-16 rounded-sm border border-washi-200 shadow-md relative overflow-hidden">
+                <div class="absolute top-4 left-4 text-washi-300 text-6xl font-serif leading-none select-none">“</div>
+                <div class="absolute bottom-4 right-4 text-washi-300 text-6xl font-serif leading-none select-none">”</div>
+                
+                <div class="space-y-2">
+                    <span class="inline-block w-6 h-6 rounded-full border border-sakura text-sakura flex items-center justify-center text-[10px] mx-auto font-sans">詩</span>
+                    <h2 id="poem-reading-title" class="text-2xl font-serif font-semibold text-washi-900">Poem Title</h2>
+                    <div class="w-8 h-[1px] bg-sakura mx-auto mt-4"></div>
+                </div>
+
+                <!-- Poem Line rendering layout -->
+                <article id="poem-reading-content" class="font-reader text-lg leading-loose text-washi-900 space-y-6 whitespace-pre-line italic font-light tracking-wide">
+                    <!-- Content dynamic injection -->
+                </article>
+            </div>
+            
+            <div class="flex justify-center">
+                <button onclick="navigateTo('poems-index-view')" class="px-6 py-3 bg-washi-900 hover:bg-sakura text-washi-50 rounded-sm text-xs tracking-widest uppercase transition-all inline-flex items-center gap-2">
+                    <i class="fa-solid fa-rotate-left text-[9px]"></i> Back to Collection
+                </button>
+            </div>
+        </section>
+
+        <!-- 7. NOTES INDEX VIEW -->
+        <section id="notes-index-view" class="view-transition view-hidden space-y-8">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-washi-200 pb-6">
+                <div>
+                    <button onclick="navigateTo('home-view')" class="text-xs text-sakura font-sans uppercase tracking-widest font-medium hover:underline mb-2 inline-flex items-center space-x-1">
+                        <i class="fa-solid fa-chevron-left text-[9px]"></i> <span>Main Scroll</span>
+                    </button>
+                    <h2 class="text-3xl font-serif font-bold text-washi-900">ZUIHITSU / ZEN REFLECTIONS</h2>
+                    <p class="text-washi-800 text-xs">Small entries of dynamic insight, ideas, and diary frames.</p>
+                </div>
+            </div>
+
+            <!-- Simple Elegant Grid Cards -->
+            <div id="notes-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                <!-- Javascript paints list entries -->
+            </div>
+        </section>
+
+        <!-- 8. NOTE DETAIL VIEW -->
+        <section id="note-detail-view" class="view-transition view-hidden max-w-xl mx-auto space-y-8">
+            <div>
+                <button onclick="navigateTo('notes-index-view')" class="text-xs text-sakura font-sans uppercase tracking-widest font-semibold hover:underline inline-flex items-center space-x-1">
+                    <i class="fa-solid fa-chevron-left text-[9px]"></i> <span>Reflections Index</span>
+                </button>
+            </div>
+
+            <!-- Zen hanging tag design -->
+            <div class="bg-washi-100 p-8 rounded-sm border-l-4 border-sakura shadow-sm space-y-6">
+                <div class="flex justify-between items-center text-[10px] font-sans tracking-widest uppercase text-washi-800 border-b border-washi-200 pb-3">
+                    <span class="font-semibold"><i class="fa-solid fa-brush mr-1"></i> Recorded Log</span>
+                    <span id="note-detail-date">Date log</span>
+                </div>
+                
+                <h3 id="note-detail-title" class="text-2xl font-serif font-semibold text-washi-900">Observation Header</h3>
+                
+                <p id="note-detail-content" class="font-reader text-base leading-relaxed text-washi-900 whitespace-pre-line font-light">
+                    Note writing context...
+                </p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="border-t border-washi-200 bg-washi-100 py-10 px-6 mt-20">
+        <div class="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-washi-800 text-xs font-sans tracking-wide">
+            <div class="flex items-center space-x-3">
+                <span class="w-6 h-6 rounded-full bg-washi-200 text-washi-900 font-serif flex items-center justify-center text-[10px]">栞</span>
+                <span class="font-serif font-semibold tracking-widest text-washi-900">SHIORI © 2026</span>
+            </div>
+            <p class="font-light text-center md:text-right uppercase text-[9px] tracking-widest">Wabi-Sabi minimalist digital repository. Quiet reading for focused minds.</p>
+        </div>
+    </footer>
+
+    <script>
+        // ==========================================================
+        // 1. DATA REPOS (Fully customizable by editing below)
+        // ==========================================================
+
+        const STORIES_DATA = [
+            {
+                id: "story-1",
+                title: "The Sound of Wind Chimes",
+                author: "Shiori Scribe",
+                summary: "A quiet observation of Kyoto during a midsummer dry spell. It follows Kenji, an old craftsperson, who spends his evenings tuning brass wind chimes (Furin), waiting for a wind that refuses to come, only to find connection from an unexpected wanderer.",
+                chapters: [
+                    {
+                        id: "s1-c1",
+                        title: "Chapter I: Scent of Summer Dryness",
+                        content: "The afternoon air in northern Kyoto did not move. It sat like heavy silk over the rooftops of narrow machiya houses.\n\nKenji rested his hand on the wooden edge of his workbench. Spread before him were thin filaments of copper wire, small porcelain bowls, and three semi-finished brass tubes. Outside his sliding door, the bamboo leaves stood frozen against a bleached blue sky. 'Stillness,' he whispered to himself, 'can be louder than a thunderclap.'\n\nFor forty years, he had tuned wind chimes (Furin) to match the slight variations of mountain breezes. Yet, this summer seemed to have swallowed the air entirely. There was no wind, only the silent hum of cicadas pulsing through the pines."
+                    },
+                    {
+                        id: "s1-c2",
+                        title: "Chapter II: The Untuned Chord",
+                        content: "By nightfall, a cool shadow had finally slipped down from the Mount Hiei ridges.\n\nA young girl carrying a worn linen backpack stopped before his open storefront. She wasn't looking at the wind chimes, but rather at a small pile of discarded, mistuned brass rods resting on his step. 'They are out of tune,' she said quietly, picking one up and tapping it with a wooden stylus.\n\nKenji watched her from the shadows. 'They were tuned to a wind that does not exist anymore,' he answered. She looked up, and in her eyes was the same patience he had spent half his life trying to shape."
+                    }
+                ]
+            },
+            {
+                id: "story-2",
+                title: "Whispers of the Moss Garden",
+                author: "Shiori Scribe",
+                summary: "An introspective science-fiction tale centered on an archivist tasked with translating the electrical pulses of centuries-old moss species inside a climate-sealed temple dome in Neo-Kamakura.",
+                chapters: [
+                    {
+                        id: "s2-c1",
+                        title: "Chapter I: Green Frequency",
+                        content: "The moisture levels within Dome 04 had to be maintained at precisely seventy-four percent. If the humidity dropped even slightly, the moss would fall dormant, and the record of the last three centuries would go silent.\n\nHana adjusted her visual interface. Her fingertips hovered over the glass casing of the Kamakura relic. Inside, a rich cushion of velvet green responded to her sensor fields, throwing soft, flickering waves of data across her monitors. 'They are recording today,' she noted."
+                    }
+                ]
+            }
+        ];
+
+        const POEMS_DATA = [
+            {
+                id: "poem-1",
+                title: "Komorebi",
+                content: "Sunlight filters thin,\nThrough the pine branch green and wet,\nGolden moss awakes.\n\nLeaves whisper low,\nA memory the forest forgot,\nBefore the frost returns."
+            },
+            {
+                id: "poem-2",
+                title: "Wabi-Sabi",
+                content: "A bowl of baked clay,\nCracked along the rim with gold,\nHolds the autumn soup.\n\nNothing lasts for long,\nNothing is complete or whole,\nPeace inside the flaw."
+            },
+            {
+                id: "poem-3",
+                title: "Sumi Ink & Paper",
+                content: "The wet brush touches washi,\nA single black line appears\nTo capture a cloud.\n\nIt dries in silence,\nToo soft to scream its story,\nYet standing for ages."
+            }
+        ];
+
+        const NOTES_DATA = [
+            {
+                id: "note-1",
+                date: "11 June 2026",
+                title: "Morning Sencha",
+                content: "The first brew of sencha green tea this morning was slightly bitter because I let the water stay too hot. The second pour, cooled with a splash of well water, was incredibly sweet. It felt like a reminder: life yields different layers when you approach it with patience and cool temper."
+            },
+            {
+                id: "note-2",
+                date: "05 June 2026",
+                title: "The Art of Leaving Empty Spaces",
+                content: "In traditional Japanese landscape painting (Sumi-e), empty spaces are not considered 'blank'. They are called 'Yohaku-no-bi'—the beauty of remaining white space. Perhaps we should leave empty slots in our daily schedules. Unprogrammed hours are where inspiration chooses to rest."
+            }
+        ];
+
+
+        // ==========================================================
+        // 2. VIEW NAVIGATION & STATE ENGINE (Integrated Splash Exit)
+        // ==========================================================
+        let currentHistory = ['home-view'];
+        let activeStoryId = null;
+        let activeStoryTab = 'summary'; 
+        let readerFontSize = 17;
+
+        window.onload = function() {
+            // Populate initial records
+            renderStoriesGrid();
+            renderPoemsGrid();
+            renderNotesGrid();
+            
+            // Handle browser back operations naturally
+            window.addEventListener('popstate', function(event) {
+                if (currentHistory.length > 1) {
+                    currentHistory.pop();
+                    const prevView = currentHistory[currentHistory.length - 1];
+                    navigateTo(prevView, false);
+                }
+            });
+
+            // Smoothly remove splash screen after animation play
+            setTimeout(() => {
+                const splash = document.getElementById('splash-screen');
+                if (splash) {
+                    splash.classList.add('splash-fade-out');
+                    // Fully detach from document flow once faded out
+                    setTimeout(() => {
+                        splash.style.display = 'none';
+                    }, 1000);
+                }
+            }, 3200); // Gives user enough time to appreciate the pristine layout sequence
+        };
+
+        function navigateTo(viewId, pushToHistory = true) {
+            const views = [
+                'home-view', 'stories-index-view', 'story-detail-view', 
+                'chapter-reading-view', 'poems-index-view', 'poem-reading-view', 
+                'notes-index-view', 'note-detail-view'
+            ];
+
+            views.forEach(v => {
+                const el = document.getElementById(v);
+                if (v === viewId) {
+                    el.classList.remove('view-hidden');
+                    el.classList.add('view-visible');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else {
+                    el.classList.add('view-hidden');
+                    el.classList.remove('view-visible');
+                }
+            });
+
+            if (pushToHistory && currentHistory[currentHistory.length - 1] !== viewId) {
+                currentHistory.push(viewId);
+            }
+
+            // Mobile Navigation responsive toggle
+            const backBtn = document.getElementById('mobile-back-btn');
+            if (viewId === 'home-view') {
+                backBtn.classList.add('hidden');
+            } else {
+                backBtn.classList.remove('hidden');
+            }
+        }
+
+        function goBack() {
+            if (currentHistory.length > 1) {
+                currentHistory.pop();
+                const prevView = currentHistory[currentHistory.length - 1];
+                navigateTo(prevView, false);
+            } else {
+                navigateTo('home-view');
+            }
+        }
+
+        function scrollToCategories() {
+            const catNav = document.getElementById('categories-nav');
+            if (catNav) {
+                catNav.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+
+        // ==========================================================
+        // 3. STORY ARCHIVE LOGIC
+        // ==========================================================
+
+        function renderStoriesGrid(filteredList = STORIES_DATA) {
+            const grid = document.getElementById('stories-grid');
+            grid.innerHTML = '';
+
+            if (filteredList.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-1 md:col-span-2 text-center py-16 text-washi-800">
+                        <i class="fa-solid fa-wind text-3xl mb-4 text-sakura/40"></i>
+                        <p class="text-xs uppercase tracking-widest font-semibold">No records found matching this path.</p>
+                    </div>`;
+                return;
+            }
+
+            filteredList.forEach(story => {
+                const card = document.createElement('div');
+                card.className = "group bg-washi-50 hover:bg-washi-100 p-6 rounded-sm border border-washi-200 shadow-sm hover:shadow-md transition-all duration-300 transform hover:-translate-y-0.5 cursor-pointer flex flex-col justify-between";
+                card.onclick = () => openStoryDetail(story.id);
+                
+                card.innerHTML = `
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-start border-b border-washi-200/60 pb-2">
+                            <span class="text-[9px] font-sans font-semibold uppercase tracking-widest text-sakura"><i class="fa-solid fa-layer-group mr-1"></i> Volume</span>
+                            <span class="text-[9px] bg-washi-200 text-washi-900 px-2.5 py-1 rounded-sm font-semibold uppercase tracking-wider">${story.chapters.length} Chapters</span>
+                        </div>
+                        <h3 class="text-xl font-serif font-bold text-washi-900 group-hover:text-sakura transition-colors">${story.title}</h3>
+                        <p class="text-washi-800 text-xs leading-relaxed line-clamp-3 font-sans">${story.summary}</p>
+                    </div>
+                    <div class="flex items-center space-x-2 text-sakura font-semibold text-xs uppercase tracking-widest pt-6 group-hover:translate-x-1 transition-transform">
+                        <span>Unroll Scroll</span> <i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function filterStories() {
+            const q = document.getElementById('story-search').value.toLowerCase();
+            const filtered = STORIES_DATA.filter(s => s.title.toLowerCase().includes(q) || s.summary.toLowerCase().includes(q));
+            renderStoriesGrid(filtered);
+        }
+
+        function openStoriesIndex() {
+            document.getElementById('story-search').value = '';
+            renderStoriesGrid();
+            navigateTo('stories-index-view');
+        }
+
+        function openStoryDetail(storyId) {
+            const story = STORIES_DATA.find(s => s.id === storyId);
+            if (!story) return;
+
+            activeStoryId = storyId;
+            document.getElementById('story-detail-title').innerText = story.title;
+            document.getElementById('story-summary-text').innerText = story.summary;
+
+            // Render chapters table lists
+            const chaptersContainer = document.getElementById('chapters-list');
+            chaptersContainer.innerHTML = '';
+
+            story.chapters.forEach((chapter, index) => {
+                const chRow = document.createElement('div');
+                chRow.className = "flex items-center justify-between p-4 bg-washi-50 hover:bg-washi-200 border border-washi-200 rounded-sm cursor-pointer transition-all hover:scale-[1.005] group";
+                chRow.onclick = () => openChapterReader(storyId, index);
+
+                chRow.innerHTML = `
+                    <div class="flex items-center space-x-4">
+                        <span class="w-7 h-7 rounded-full bg-sakura/10 text-sakura flex items-center justify-center font-bold text-xs group-hover:bg-sakura group-hover:text-white transition-all">${index + 1}</span>
+                        <h4 class="font-serif font-bold text-washi-900 text-base group-hover:text-sakura transition-colors">${chapter.title}</h4>
+                    </div>
+                    <span class="text-xs uppercase tracking-widest text-sakura font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center space-x-1">
+                        <span>Read</span> <i class="fa-solid fa-angle-right"></i>
+                    </span>
+                `;
+                chaptersContainer.appendChild(chRow);
+            });
+
+            switchStoryTab('summary');
+            navigateTo('story-detail-view');
+        }
+
+        function switchStoryTab(tab) {
+            activeStoryTab = tab;
+            const summaryBtn = document.getElementById('tab-summary-btn');
+            const chaptersBtn = document.getElementById('tab-chapters-btn');
+            const summaryContainer = document.getElementById('story-summary-container');
+            const chaptersContainer = document.getElementById('story-chapters-container');
+
+            if (tab === 'summary') {
+                summaryBtn.className = "px-6 py-3 font-serif font-medium border-b border-sakura text-sakura focus:outline-none transition-all";
+                chaptersBtn.className = "px-6 py-3 font-serif font-medium border-b border-transparent text-washi-800 hover:text-washi-900 hover:border-washi-300 focus:outline-none transition-all";
+                summaryContainer.classList.remove('hidden');
+                chaptersContainer.classList.add('hidden');
+            } else {
+                chaptersBtn.className = "px-6 py-3 font-serif font-medium border-b border-sakura text-sakura focus:outline-none transition-all";
+                summaryBtn.className = "px-6 py-3 font-serif font-medium border-b border-transparent text-washi-800 hover:text-washi-900 hover:border-washi-300 focus:outline-none transition-all";
+                chaptersContainer.classList.remove('hidden');
+                summaryContainer.classList.add('hidden');
+            }
+        }
+
+
+        // ==========================================================
+        // 4. PERSISTENT READER SETTINGS
+        // ==========================================================
+        let currentChapterIndex = 0;
+
+        function openChapterReader(storyId, chapterIndex) {
+            const story = STORIES_DATA.find(s => s.id === storyId);
+            if (!story) return;
+
+            currentChapterIndex = chapterIndex;
+            const chapter = story.chapters[chapterIndex];
+
+            document.getElementById('chapter-reading-story-title').innerText = story.title;
+            document.getElementById('chapter-reading-title').innerText = chapter.title;
+            
+            const contentContainer = document.getElementById('chapter-reading-content');
+            contentContainer.innerText = chapter.content;
+            contentContainer.style.fontSize = `${readerFontSize}px`;
+            document.getElementById('font-size-indicator').innerText = `${readerFontSize}px`;
+
+            const prevBtn = document.getElementById('prev-chapter-btn');
+            const nextBtn = document.getElementById('next-chapter-btn');
+
+            if (chapterIndex > 0) {
+                prevBtn.classList.remove('opacity-30', 'pointer-events-none');
+                prevBtn.onclick = () => openChapterReader(storyId, chapterIndex - 1);
+            } else {
+                prevBtn.classList.add('opacity-30', 'pointer-events-none');
+            }
+
+            if (chapterIndex < story.chapters.length - 1) {
+                nextBtn.classList.remove('opacity-30', 'pointer-events-none');
+                nextBtn.innerHTML = `Next Chapter <i class="fa-solid fa-chevron-right text-[9px]"></i>`;
+                nextBtn.onclick = () => openChapterReader(storyId, chapterIndex + 1);
+            } else {
+                nextBtn.classList.remove('opacity-30', 'pointer-events-none');
+                nextBtn.innerHTML = `Complete Archive <i class="fa-solid fa-check text-[9px]"></i>`;
+                nextBtn.onclick = () => openStoryDetail(storyId);
+            }
+
+            document.getElementById('chapter-back-text').innerText = `${story.title}`;
+
+            navigateTo('chapter-reading-view');
+        }
+
+        function adjustReaderFontSize(change) {
+            readerFontSize = Math.min(Math.max(13, readerFontSize + change), 26);
+            
+            // Scaling up / down readers
+            const chapterContent = document.getElementById('chapter-reading-content');
+            if (chapterContent) {
+                chapterContent.style.fontSize = `${readerFontSize}px`;
+            }
+            const indicator1 = document.getElementById('font-size-indicator');
+            if (indicator1) indicator1.innerText = `${readerFontSize}px`;
+
+            const poemContent = document.getElementById('poem-reading-content');
+            if (poemContent) {
+                poemContent.style.fontSize = `${readerFontSize + 2}px`;
+            }
+            const indicator2 = document.getElementById('poem-font-size-indicator');
+            if (indicator2) indicator2.innerText = `${readerFontSize + 2}px`;
+        }
+
+
+        // ==========================================================
+        // 5. POETRY ARCHIVE LOGIC
+        // ==========================================================
+
+        function renderPoemsGrid(filteredList = POEMS_DATA) {
+            const grid = document.getElementById('poems-grid');
+            grid.innerHTML = '';
+
+            if (filteredList.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-1 sm:col-span-3 text-center py-16 text-washi-800">
+                        <i class="fa-solid fa-wind text-3xl mb-4 text-sakura/40"></i>
+                        <p class="text-xs uppercase tracking-widest font-semibold">No poems matched this selection.</p>
+                    </div>`;
+                return;
+            }
+
+            filteredList.forEach(poem => {
+                const card = document.createElement('div');
+                card.className = "group bg-washi-50 hover:bg-washi-100 p-6 rounded-sm border border-washi-200 shadow-sm hover:shadow-md transition-all duration-300 transform hover:-translate-y-0.5 cursor-pointer flex flex-col justify-between h-48";
+                card.onclick = () => openPoemReader(poem.id);
+
+                card.innerHTML = `
+                    <div class="space-y-3">
+                        <div class="text-sakura text-xs tracking-wider font-semibold font-sans">詩 / UTA</div>
+                        <h3 class="text-lg font-serif font-bold text-washi-900 group-hover:text-sakura transition-colors line-clamp-2">${poem.title}</h3>
+                    </div>
+                    <div class="text-[10px] text-washi-800 uppercase tracking-widest font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
+                        <span>Read Verse</span> <i class="fa-solid fa-arrow-right-long text-sakura text-[9px]"></i>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function filterPoems() {
+            const q = document.getElementById('poem-search').value.toLowerCase();
+            const filtered = POEMS_DATA.filter(p => p.title.toLowerCase().includes(q) || p.content.toLowerCase().includes(q));
+            renderPoemsGrid(filtered);
+        }
+
+        function openPoemsIndex() {
+            document.getElementById('poem-search').value = '';
+            renderPoemsGrid();
+            navigateTo('poems-index-view');
+        }
+
+        function openPoemReader(poemId) {
+            const poem = POEMS_DATA.find(p => p.id === poemId);
+            if (!poem) return;
+
+            document.getElementById('poem-reading-title').innerText = poem.title;
+            const contentContainer = document.getElementById('poem-reading-content');
+            contentContainer.innerText = poem.content;
+            contentContainer.style.fontSize = `${readerFontSize + 2}px`;
+            document.getElementById('poem-font-size-indicator').innerText = `${readerFontSize + 2}px`;
+
+            navigateTo('poem-reading-view');
+        }
+
+
+        // ==========================================================
+        // 6. REFLECTIONS & LOGS ENGINE
+        // ==========================================================
+
+        function renderNotesGrid() {
+            const grid = document.getElementById('notes-grid');
+            grid.innerHTML = '';
+
+            if (NOTES_DATA.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-1 sm:col-span-3 text-center py-16 text-washi-800">
+                        <p class="text-xs uppercase tracking-widest font-semibold">The ink pot is currently empty.</p>
+                    </div>`;
+                return;
+            }
+
+            NOTES_DATA.forEach(note => {
+                const card = document.createElement('div');
+                card.className = "bg-washi-100 hover:bg-washi-200/60 p-6 rounded-sm border border-washi-200 shadow-sm hover:shadow-md transition-all duration-300 transform hover:-translate-y-0.5 cursor-pointer flex flex-col justify-between h-56";
+                card.onclick = () => openNoteDetail(note.id);
+
+                card.innerHTML = `
+                    <div class="space-y-3">
+                        <span class="text-[9px] uppercase font-bold tracking-widest text-sakura"><i class="fa-regular fa-calendar-check mr-1"></i> ${note.date}</span>
+                        <h3 class="text-lg font-serif font-semibold text-washi-900 line-clamp-2">${note.title}</h3>
+                        <p class="text-washi-800 text-xs leading-relaxed line-clamp-3 font-sans">${note.content}</p>
+                    </div>
+                    <div class="text-[10px] text-sakura font-semibold uppercase tracking-widest flex items-center gap-1">
+                        <span>Examine log</span> <i class="fa-solid fa-angle-right text-[9px]"></i>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function openNotesIndex() {
+            renderNotesGrid();
+            navigateTo('notes-index-view');
+        }
+
+        function openNoteDetail(noteId) {
+            const note = NOTES_DATA.find(n => n.id === noteId);
+            if (!note) return;
+
+            document.getElementById('note-detail-date').innerText = note.date;
+            document.getElementById('note-detail-title').innerText = note.title;
+            document.getElementById('note-detail-content').innerText = note.content;
+
+            navigateTo('note-detail-view');
+        }
+    </script>
+</body>
 </html>
