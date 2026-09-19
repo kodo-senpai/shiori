@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#FCFAF2">
     <title>Shiori - Minimalist Literary Journal</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -191,9 +192,57 @@
                 transform: translateY(0);
             }
         }
+
+        :root {
+            color-scheme: light;
+            --safe-top: env(safe-area-inset-top, 0px);
+            --safe-right: env(safe-area-inset-right, 0px);
+            --safe-bottom: env(safe-area-inset-bottom, 0px);
+            --safe-left: env(safe-area-inset-left, 0px);
+        }
+        *, *::before, *::after { box-sizing: border-box; }
+        html { overflow-x: hidden; scroll-padding-top: 5rem; }
+        body { min-width: 320px; overflow-x: hidden; padding-bottom: var(--safe-bottom); }
+        button, a, input, select, textarea { touch-action: manipulation; }
+        button, a { -webkit-tap-highlight-color: rgba(200, 90, 106, 0.18); }
+        button, input, select, textarea { min-height: 44px; }
+        textarea { min-height: 7rem; resize: vertical; }
+        h1, h2, h3, h4 { text-wrap: balance; }
+        .breakable, article, [class*="whitespace-pre-line"] { overflow-wrap: anywhere; }
+        .safe-area-x { padding-left: max(1.5rem, var(--safe-left)); padding-right: max(1.5rem, var(--safe-right)); }
+        .mobile-nav-panel { overscroll-behavior: contain; }
+        @media (max-width: 767px) {
+            .desktop-nav { display: none; }
+            main { padding-left: max(1rem, var(--safe-left)); padding-right: max(1rem, var(--safe-right)); padding-top: 1.5rem; }
+            nav { padding-top: max(0.75rem, var(--safe-top)); padding-left: max(1rem, var(--safe-left)); padding-right: max(1rem, var(--safe-right)); padding-bottom: 0.75rem; }
+            nav .brand-label { font-size: 1.05rem; letter-spacing: 0.16em; }
+            .mobile-menu-trigger { display: inline-flex; }
+            .mobile-nav-panel { display: none; }
+            .mobile-nav-panel.is-open { display: grid; }
+            .mobile-nav-panel button { justify-content: flex-start; min-height: 48px; }
+            .hero-heading { font-size: clamp(2rem, 10vw, 3rem); }
+            .reader-controls { flex-wrap: wrap; gap: 0.5rem; }
+            .reader-controls > * { min-height: 44px; }
+            .chapter-navigation { flex-direction: column; align-items: stretch; }
+            .chapter-navigation button { justify-content: center; width: 100%; }
+            .studio-actions, .studio-actions button { width: 100%; }
+            .studio-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .studio-actions button:last-of-type { grid-column: 1 / -1; }
+            .content-form { padding: 1rem; }
+            .tab-bar { overflow-x: auto; scrollbar-width: thin; }
+            .tab-bar button { flex: 0 0 auto; min-height: 48px; }
+        }
+        @media (min-width: 768px) {
+            .mobile-menu-trigger, .mobile-nav-panel { display: none; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+            .view-hidden { transform: none; }
+        }
     </style>
 </head>
 <body class="bg-washi-50 text-washi-900 selection:bg-sakura/15 selection:text-sakura-dark min-h-screen flex flex-col justify-between">
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:z-[10000] focus:top-3 focus:left-3 focus:px-4 focus:py-3 focus:bg-washi-900 focus:text-washi-50">Skip to main content</a>
 
     <!-- ELEGANT SPLASH OPENING OVERLAY -->
     <div id="splash-screen" class="fixed inset-0 z-[9999] bg-washi-50 flex flex-col items-center justify-center overflow-hidden">
@@ -221,14 +270,14 @@
     </div>
 
     <!-- MAIN NAVBAR -->
-    <nav class="sticky top-0 z-50 backdrop-blur-md bg-washi-50/80 border-b border-washi-200 py-5 px-6 md:px-12 transition-all duration-300">
+    <nav class="sticky top-0 z-50 backdrop-blur-md bg-washi-50/80 border-b border-washi-200 py-5 px-6 md:px-12 transition-all duration-300" aria-label="Primary navigation">
         <div class="max-w-5xl mx-auto flex justify-between items-center">
-            <a href="#" onclick="navigateTo('home-view')" class="flex items-center space-x-3 text-2xl font-serif font-bold tracking-wider text-washi-900 hover:text-sakura transition-colors">
+            <a href="#home-view" onclick="navigateTo('home-view'); return false;" class="flex items-center space-x-3 text-2xl font-serif font-bold tracking-wider text-washi-900 hover:text-sakura transition-colors min-h-[44px]">
                 <!-- Red Hanko Stamp style icon -->
                 <span class="w-8 h-8 rounded-full bg-sakura text-white font-serif flex items-center justify-center text-sm shadow-sm">栞</span>
-                <span class="tracking-widest">SHIORI</span>
+                <span class="tracking-widest brand-label">SHIORI</span>
             </a>
-            <div class="hidden md:flex space-x-8 font-sans text-xs tracking-widest uppercase font-medium">
+            <div class="desktop-nav hidden md:flex space-x-8 font-sans text-xs tracking-widest uppercase font-medium">
                 <button onclick="navigateTo('home-view')" class="hover:text-sakura transition-colors relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1px] after:bg-sakura hover:after:w-full after:transition-all">Home</button>
                 <button onclick="openStoriesIndex()" class="hover:text-sakura transition-colors relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1px] after:bg-sakura hover:after:w-full after:transition-all">Stories</button>
                 <button onclick="openPoemsIndex()" class="hover:text-sakura transition-colors relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1px] after:bg-sakura hover:after:w-full after:transition-all">Poetry</button>
@@ -236,16 +285,24 @@
                 <button onclick="openAdmin()" class="hover:text-sakura transition-colors relative py-1">Manage</button>
             </div>
             <div class="flex items-center gap-2">
-                <button id="theme-toggle" type="button" aria-label="Toggle dark mode" onclick="toggleTheme()" class="px-2 py-1 text-washi-800 hover:text-sakura" title="Toggle theme"><i class="fa-solid fa-moon"></i></button>
+                <button id="theme-toggle" type="button" aria-label="Toggle dark mode" onclick="toggleTheme()" class="px-2 py-1 text-washi-800 hover:text-sakura" title="Toggle theme"><i class="fa-solid fa-moon" aria-hidden="true"></i></button>
+                <button id="mobile-menu-trigger" type="button" aria-expanded="false" aria-controls="mobile-nav-panel" aria-label="Open navigation menu" onclick="toggleMobileNav()" class="mobile-menu-trigger hidden md:hidden items-center justify-center px-3 py-2 text-washi-900 hover:text-sakura"><i class="fa-solid fa-bars" aria-hidden="true"></i></button>
                 <!-- Mobile back navigation button -->
             <button id="mobile-back-btn" onclick="goBack()" class="md:hidden flex items-center space-x-1 px-3 py-1.5 rounded-sm bg-washi-200 text-washi-900 text-xs font-semibold uppercase tracking-wider hover:bg-sakura hover:text-white transition-all hidden">
                 <i class="fa-solid fa-chevron-left"></i> <span>Back</span>
             </button>
             </div>
         </div>
+        <div id="mobile-nav-panel" class="mobile-nav-panel max-w-5xl mx-auto mt-3 border-t border-washi-200 pt-2 gap-1 font-sans text-xs tracking-widest uppercase font-medium" aria-label="Mobile navigation">
+            <button type="button" onclick="mobileNavigate('home-view')">Home</button>
+            <button type="button" onclick="mobileNavigate('stories-index-view')">Stories</button>
+            <button type="button" onclick="mobileNavigate('poems-index-view')">Poetry</button>
+            <button type="button" onclick="mobileNavigate('notes-index-view')">Reflections</button>
+            <button type="button" onclick="mobileNavigate('admin-view')">Manage</button>
+        </div>
     </nav>
 
-    <main class="flex-grow max-w-5xl w-full mx-auto px-6 md:px-12 py-10 relative">
+    <main id="main-content" tabindex="-1" class="flex-grow max-w-5xl w-full mx-auto px-6 md:px-12 py-10 relative">
 
         <!-- 1. HOME VIEW -->
         <section id="home-view" class="view-transition view-visible space-y-20">
@@ -254,7 +311,7 @@
             <div class="flex flex-col-reverse md:flex-row items-center justify-between py-10 md:py-16 gap-12">
                 <div class="w-full md:w-3/5 space-y-6 text-center md:text-left">
                     <span class="inline-block border border-washi-300 text-washi-800 text-[10px] tracking-widest font-semibold px-4 py-1.5 uppercase rounded-sm">木漏れ日 — Komorebi</span>
-                    <h1 class="text-4xl md:text-6xl font-serif font-semibold text-washi-900 leading-tight">
+                    <h1 class="hero-heading text-4xl md:text-6xl font-serif font-semibold text-washi-900 leading-tight">
                         Woven Thoughts <br>
                         <span class="text-sakura italic font-light">&amp; Quiet Spaces</span>
                     </h1>
@@ -368,8 +425,8 @@
                 </div>
                 <!-- Simple Elegant Search -->
                 <div class="relative w-full md:w-64">
-                    <input type="text" id="story-search" oninput="filterStories()" placeholder="Search archive..." class="w-full pl-9 pr-4 py-2 bg-washi-50 border border-washi-200 rounded-sm text-xs text-washi-900 placeholder-washi-800 focus:outline-none focus:ring-[1px] focus:ring-sakura transition-all">
-                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-washi-800 text-[10px]"></i>
+                    <label for="story-search" class="sr-only">Search stories</label><input type="search" id="story-search" name="story-search" autocomplete="off" oninput="filterStories()" placeholder="Search archive…" aria-label="Search stories" class="w-full pl-9 pr-4 py-2 bg-washi-50 border border-washi-200 rounded-sm text-xs text-washi-900 placeholder-washi-800 focus:outline-none focus:ring-[1px] focus:ring-sakura transition-all">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-4 text-washi-800 text-[10px]" aria-hidden="true"></i>
                 </div>
             </div>
 
@@ -393,7 +450,7 @@
             </div>
 
             <!-- Tab bar layout -->
-            <div class="flex border-b border-washi-200">
+            <div class="tab-bar flex border-b border-washi-200" role="tablist" aria-label="Story details">
                 <button id="tab-summary-btn" onclick="switchStoryTab('summary')" class="px-6 py-3 font-serif font-medium border-b border-sakura text-sakura focus:outline-none transition-all">
                     Summary / 梗概
                 </button>
@@ -428,7 +485,7 @@
 
         <!-- 4. CHAPTER READING VIEW -->
         <section id="chapter-reading-view" class="view-transition view-hidden max-w-2xl mx-auto space-y-8">
-            <div class="flex items-center justify-between border-b border-washi-200 pb-4">
+            <div class="reader-controls flex items-center justify-between border-b border-washi-200 pb-4">
                 <button id="chapter-back-btn" onclick="navigateTo('story-detail-view')" class="text-xs text-sakura font-sans uppercase tracking-widest font-semibold hover:underline inline-flex items-center space-x-1">
                     <i class="fa-solid fa-chevron-left text-[9px]"></i> <span id="chapter-back-text">Back</span>
                 </button>
@@ -454,7 +511,7 @@
             </article>
 
             <!-- Bottom minimal control panel -->
-            <div class="flex items-center justify-between border-t border-washi-200 pt-8 mt-12">
+            <div class="chapter-navigation flex items-center justify-between border-t border-washi-200 pt-8 mt-12">
                 <button id="prev-chapter-btn" class="px-4 py-2 text-xs uppercase tracking-widest font-semibold bg-washi-200 text-washi-900 hover:bg-sakura hover:text-white transition-all inline-flex items-center gap-2">
                     <i class="fa-solid fa-chevron-left text-[9px]"></i> Previous
                 </button>
@@ -476,8 +533,8 @@
                 </div>
                 <!-- Clean Search for poems -->
                 <div class="relative w-full md:w-64">
-                    <input type="text" id="poem-search" oninput="filterPoems()" placeholder="Filter collections..." class="w-full pl-9 pr-4 py-2 bg-washi-50 border border-washi-200 rounded-sm text-xs text-washi-900 placeholder-washi-800 focus:outline-none focus:ring-[1px] focus:ring-sakura transition-all">
-                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-washi-800 text-[10px]"></i>
+                    <label for="poem-search" class="sr-only">Filter poetry collections</label><input type="search" id="poem-search" name="poem-search" autocomplete="off" oninput="filterPoems()" placeholder="Filter collections…" aria-label="Filter poetry collections" class="w-full pl-9 pr-4 py-2 bg-washi-50 border border-washi-200 rounded-sm text-xs text-washi-900 placeholder-washi-800 focus:outline-none focus:ring-[1px] focus:ring-sakura transition-all">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-4 text-washi-800 text-[10px]" aria-hidden="true"></i>
                 </div>
             </div>
 
@@ -488,7 +545,7 @@
 
         <!-- 6. POEM READING VIEW -->
         <section id="poem-reading-view" class="view-transition view-hidden max-w-xl mx-auto space-y-12">
-            <div class="flex items-center justify-between border-b border-washi-200 pb-4">
+            <div class="reader-controls flex items-center justify-between border-b border-washi-200 pb-4">
                 <button onclick="navigateTo('poems-index-view')" class="text-xs text-sakura font-sans uppercase tracking-widest font-semibold hover:underline inline-flex items-center space-x-1">
                     <i class="fa-solid fa-chevron-left text-[9px]"></i> <span>Back to Poetry Index</span>
                 </button>
@@ -546,13 +603,13 @@
         <section id="admin-view" class="view-transition view-hidden space-y-8">
             <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-washi-200 pb-6">
                 <div><p class="text-[10px] uppercase tracking-[0.25em] text-sakura font-semibold">Content studio</p><h2 class="text-3xl font-serif font-bold text-washi-900">Manage the archive</h2><p class="text-washi-800 text-xs mt-2">Drafts stay in this browser. Export a JSON copy whenever you like.</p></div>
-                <div class="flex flex-wrap gap-2"><button type="button" onclick="exportContent()" class="px-3 py-2 bg-washi-900 text-washi-50 text-[10px] uppercase tracking-widest rounded-sm">Export JSON</button><button type="button" onclick="document.getElementById('import-file').click()" class="px-3 py-2 border border-washi-300 text-[10px] uppercase tracking-widest rounded-sm">Import JSON</button><button type="button" onclick="resetContent()" class="px-3 py-2 border border-sakura text-sakura text-[10px] uppercase tracking-widest rounded-sm">Reset demo</button><input id="import-file" type="file" accept="application/json,.json" class="hidden" onchange="importContent(event)"></div>
+                <div class="studio-actions flex flex-wrap gap-2"><button type="button" onclick="exportContent()" class="px-3 py-2 bg-washi-900 text-washi-50 text-[10px] uppercase tracking-widest rounded-sm">Export JSON</button><button type="button" onclick="document.getElementById('import-file').click()" class="px-3 py-2 border border-washi-300 text-[10px] uppercase tracking-widest rounded-sm">Import JSON</button><button type="button" onclick="resetContent()" class="px-3 py-2 border border-sakura text-sakura text-[10px] uppercase tracking-widest rounded-sm">Reset demo</button><input id="import-file" type="file" accept="application/json,.json" class="hidden" onchange="importContent(event)"></div>
             </div>
             <div id="admin-status" role="status" aria-live="polite" class="text-xs text-sakura min-h-[1.25rem]"></div>
             <div class="grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-8">
                 <div class="space-y-4"><div class="flex items-center justify-between"><h3 class="font-serif text-xl text-washi-900">Your entries</h3><button type="button" onclick="newEntry()" class="text-xs text-sakura uppercase tracking-widest">+ New entry</button></div><div id="admin-entry-list" class="space-y-2"></div></div>
-                <form id="content-form" class="space-y-4 bg-washi-100 p-6 border border-washi-200 rounded-sm" onsubmit="saveEntry(event)">
-                    <input type="hidden" id="entry-id"><label class="block text-xs uppercase tracking-widest text-washi-800">Type<select id="entry-type" onchange="renderEditorFields()" class="mt-2 w-full p-2 bg-washi-50 border border-washi-200 rounded-sm"><option value="story">Story</option><option value="poem">Poem</option><option value="note">Reflection / note</option></select></label>
+                <form id="content-form" class="content-form space-y-4 bg-washi-100 p-6 border border-washi-200 rounded-sm" onsubmit="saveEntry(event)">
+                    <input type="hidden" id="entry-id"><label for="entry-type" class="block text-xs uppercase tracking-widest text-washi-800">Type<select id="entry-type" name="type" onchange="renderEditorFields()" class="mt-2 w-full p-2 bg-washi-50 border border-washi-200 rounded-sm"><option value="story">Story</option><option value="poem">Poem</option><option value="note">Reflection / note</option></select></label>
                     <div id="editor-fields"></div><div class="flex gap-3 pt-2"><button class="px-4 py-2 bg-sakura text-white text-xs uppercase tracking-widest rounded-sm" type="submit">Save draft</button><button class="px-4 py-2 border border-washi-300 text-xs uppercase tracking-widest rounded-sm" type="button" onclick="newEntry()">Clear</button></div>
                 </form>
             </div>
@@ -777,6 +834,21 @@
             }
         }
 
+        function toggleMobileNav() {
+            const panel = document.getElementById('mobile-nav-panel');
+            const trigger = document.getElementById('mobile-menu-trigger');
+            const isOpen = panel.classList.toggle('is-open');
+            trigger.setAttribute('aria-expanded', String(isOpen));
+            trigger.setAttribute('aria-label', isOpen ? 'Close navigation menu' : 'Open navigation menu');
+            trigger.querySelector('i').className = isOpen ? 'fa-solid fa-xmark' : 'fa-solid fa-bars';
+        }
+
+        function mobileNavigate(viewId) {
+            navigateTo(viewId);
+            const panel = document.getElementById('mobile-nav-panel');
+            if (panel.classList.contains('is-open')) toggleMobileNav();
+        }
+
 
         function toggleTheme() { const dark = document.body.classList.toggle('theme-dark'); saveSettings({ dark }); document.getElementById('theme-toggle').innerHTML = dark ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>'; }
         function openAdmin() { renderAdminList(); newEntry(); navigateTo('admin-view'); }
@@ -821,6 +893,10 @@
                 const card = document.createElement('div');
                 card.className = "group bg-washi-50 hover:bg-washi-100 p-6 rounded-sm border border-washi-200 shadow-sm hover:shadow-md transition-all duration-300 transform hover:-translate-y-0.5 cursor-pointer flex flex-col justify-between";
                 card.onclick = () => openStoryDetail(story.id);
+                card.tabIndex = 0;
+                card.setAttribute('role', 'button');
+                card.setAttribute('aria-label', `Open story: ${story.title}`);
+                card.onkeydown = event => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); openStoryDetail(story.id); } };
                 
                 card.innerHTML = `
                     <div class="space-y-4">
@@ -867,6 +943,10 @@
                 const chRow = document.createElement('div');
                 chRow.className = "flex items-center justify-between p-4 bg-washi-50 hover:bg-washi-200 border border-washi-200 rounded-sm cursor-pointer transition-all hover:scale-[1.005] group";
                 chRow.onclick = () => openChapterReader(storyId, index);
+                chRow.tabIndex = 0;
+                chRow.setAttribute('role', 'button');
+                chRow.setAttribute('aria-label', `Read chapter ${index + 1}: ${chapter.title}`);
+                chRow.onkeydown = event => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); openChapterReader(storyId, index); } };
 
                 chRow.innerHTML = `
                     <div class="flex items-center space-x-4">
