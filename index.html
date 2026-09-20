@@ -71,6 +71,7 @@
         /* Minimalist scrollbar styling */
         ::-webkit-scrollbar {
             width: 6px;
+            height: 4px;
         }
         ::-webkit-scrollbar-track {
             background: #FCFAF2;
@@ -83,7 +84,14 @@
             background: #C85A6A;
         }
 
-        /* PREMIUM OPENING SPLASH ANIMATION KEYFRAMES */
+        .scrollbar-none::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-none {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
         .splash-fade-out {
             opacity: 0;
             pointer-events: none;
@@ -173,15 +181,6 @@
             }
         }
 
-        .focus-ring:focus-visible, button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 2px solid #C85A6A; outline-offset: 3px; }
-        body.theme-dark { background-color: #211f1c; color: #f5f2eb; }
-        body.theme-dark .bg-washi-50 { background-color: #292622 !important; }
-        body.theme-dark .bg-washi-100 { background-color: #332f2a !important; }
-        body.theme-dark .bg-washi-200, body.theme-dark .border-washi-200, body.theme-dark .border-washi-200\/60 { border-color: #514a40 !important; background-color: #403a33; }
-        body.theme-dark .text-washi-900 { color: #f5f2eb !important; }
-        body.theme-dark .text-washi-800 { color: #d4cbbd !important; }
-        body.theme-dark #splash-screen { background-color: #211f1c; }
-
         @keyframes subtitleReveal {
             0% {
                 opacity: 0;
@@ -192,6 +191,15 @@
                 transform: translateY(0);
             }
         }
+
+        .focus-ring:focus-visible, button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 2px solid #C85A6A; outline-offset: 3px; }
+        body.theme-dark { background-color: #211f1c; color: #f5f2eb; }
+        body.theme-dark .bg-washi-50 { background-color: #292622 !important; }
+        body.theme-dark .bg-washi-100 { background-color: #332f2a !important; }
+        body.theme-dark .bg-washi-200, body.theme-dark .border-washi-200, body.theme-dark .border-washi-200\/60, body.theme-dark .border-washi-200\/50 { border-color: #514a40 !important; background-color: #403a33; }
+        body.theme-dark .text-washi-900 { color: #f5f2eb !important; }
+        body.theme-dark .text-washi-800 { color: #d4cbbd !important; }
+        body.theme-dark #splash-screen { background-color: #211f1c; }
 
         :root {
             color-scheme: light;
@@ -205,21 +213,16 @@
         body { min-width: 320px; overflow-x: hidden; padding-bottom: var(--safe-bottom); }
         button, a, input, select, textarea { touch-action: manipulation; }
         button, a { -webkit-tap-highlight-color: rgba(200, 90, 106, 0.18); }
-        button, input, select, textarea { min-height: 44px; }
+        button, input, select, textarea { min-height: 40px; }
         textarea { min-height: 7rem; resize: vertical; }
         h1, h2, h3, h4 { text-wrap: balance; }
         .breakable, article, [class*="whitespace-pre-line"] { overflow-wrap: anywhere; }
         .safe-area-x { padding-left: max(1.5rem, var(--safe-left)); padding-right: max(1.5rem, var(--safe-right)); }
-        .mobile-nav-panel { overscroll-behavior: contain; }
+
         @media (max-width: 767px) {
-            .desktop-nav { display: none; }
             main { padding-left: max(1rem, var(--safe-left)); padding-right: max(1rem, var(--safe-right)); padding-top: 1.5rem; }
-            nav { padding-top: max(0.75rem, var(--safe-top)); padding-left: max(1rem, var(--safe-left)); padding-right: max(1rem, var(--safe-right)); padding-bottom: 0.75rem; }
+            nav { padding-top: max(0.5rem, var(--safe-top)); padding-left: max(1rem, var(--safe-left)); padding-right: max(1rem, var(--safe-right)); padding-bottom: 0.5rem; }
             nav .brand-label { font-size: 1.05rem; letter-spacing: 0.16em; }
-            .mobile-menu-trigger { display: inline-flex; }
-            .mobile-nav-panel { display: none; }
-            .mobile-nav-panel.is-open { display: grid; }
-            .mobile-nav-panel button { justify-content: flex-start; min-height: 48px; }
             .hero-heading { font-size: clamp(2rem, 10vw, 3rem); }
             .reader-controls { flex-wrap: wrap; gap: 0.5rem; }
             .reader-controls > * { min-height: 44px; }
@@ -230,11 +233,9 @@
             .studio-actions button:last-of-type { grid-column: 1 / -1; }
             .content-form { padding: 1rem; }
             .tab-bar { overflow-x: auto; scrollbar-width: thin; }
-            .tab-bar button { flex: 0 0 auto; min-height: 48px; }
+            .tab-bar button { flex: 0 0 auto; min-height: 44px; }
         }
-        @media (min-width: 768px) {
-            .mobile-menu-trigger, .mobile-nav-panel { display: none; }
-        }
+
         @media (prefers-reduced-motion: reduce) {
             *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
             .view-hidden { transform: none; }
@@ -269,36 +270,35 @@
         </div>
     </div>
 
-    <!-- MAIN NAVBAR -->
-    <nav class="sticky top-0 z-50 backdrop-blur-md bg-washi-50/80 border-b border-washi-200 py-5 px-6 md:px-12 transition-all duration-300" aria-label="Primary navigation">
-        <div class="max-w-5xl mx-auto flex justify-between items-center">
-            <a href="#home-view" onclick="navigateTo('home-view'); return false;" class="flex items-center space-x-3 text-2xl font-serif font-bold tracking-wider text-washi-900 hover:text-sakura transition-colors min-h-[44px]">
-                <!-- Red Hanko Stamp style icon -->
-                <span class="w-8 h-8 rounded-full bg-sakura text-white font-serif flex items-center justify-center text-sm shadow-sm">栞</span>
-                <span class="tracking-widest brand-label">SHIORI</span>
-            </a>
-            <div class="desktop-nav hidden md:flex space-x-8 font-sans text-xs tracking-widest uppercase font-medium">
-                <button onclick="navigateTo('home-view')" class="hover:text-sakura transition-colors relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1px] after:bg-sakura hover:after:w-full after:transition-all">Home</button>
-                <button onclick="openStoriesIndex()" class="hover:text-sakura transition-colors relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1px] after:bg-sakura hover:after:w-full after:transition-all">Stories</button>
-                <button onclick="openPoemsIndex()" class="hover:text-sakura transition-colors relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1px] after:bg-sakura hover:after:w-full after:transition-all">Poetry</button>
-                <button onclick="openNotesIndex()" class="hover:text-sakura transition-colors relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1px] after:bg-sakura hover:after:w-full after:transition-all">Reflections</button>
-                <button onclick="openAdmin()" class="hover:text-sakura transition-colors relative py-1">Manage</button>
+    <!-- MAIN NAVBAR: Navigation tabs always visible and accessible on mobile and desktop -->
+    <nav class="sticky top-0 z-50 backdrop-blur-md bg-washi-50/90 border-b border-washi-200 py-2.5 md:py-5 px-4 md:px-12 transition-all duration-300" aria-label="Primary navigation">
+        <div class="max-w-5xl mx-auto flex flex-col md:flex-row md:justify-between md:items-center gap-2 md:gap-0">
+            <!-- Brand and Utilities Row -->
+            <div class="flex justify-between items-center w-full md:w-auto">
+                <a href="#home-view" onclick="navigateTo('home-view'); return false;" class="flex items-center space-x-3 text-xl md:text-2xl font-serif font-bold tracking-wider text-washi-900 hover:text-sakura transition-colors min-h-[44px]">
+                    <!-- Red Hanko Stamp style icon -->
+                    <span class="w-8 h-8 rounded-full bg-sakura text-white font-serif flex items-center justify-center text-sm shadow-sm">栞</span>
+                    <span class="tracking-widest brand-label">SHIORI</span>
+                </a>
+                <div class="flex items-center gap-2">
+                    <!-- Mobile back navigation button -->
+                    <button id="mobile-back-btn" onclick="goBack()" class="md:hidden flex items-center space-x-1 px-2.5 py-1.5 rounded-sm bg-washi-200 text-washi-900 text-xs font-semibold uppercase tracking-wider hover:bg-sakura hover:text-white transition-all hidden">
+                        <i class="fa-solid fa-chevron-left text-[10px]"></i> <span>Back</span>
+                    </button>
+                    <button id="theme-toggle" type="button" aria-label="Toggle dark mode" onclick="toggleTheme()" class="px-2 py-1 text-washi-800 hover:text-sakura transition-colors" title="Toggle theme">
+                        <i class="fa-solid fa-moon" aria-hidden="true"></i>
+                    </button>
+                </div>
             </div>
-            <div class="flex items-center gap-2">
-                <button id="theme-toggle" type="button" aria-label="Toggle dark mode" onclick="toggleTheme()" class="px-2 py-1 text-washi-800 hover:text-sakura" title="Toggle theme"><i class="fa-solid fa-moon" aria-hidden="true"></i></button>
-                <button id="mobile-menu-trigger" type="button" aria-expanded="false" aria-controls="mobile-nav-panel" aria-label="Open navigation menu" onclick="toggleMobileNav()" class="mobile-menu-trigger hidden md:hidden items-center justify-center px-3 py-2 text-washi-900 hover:text-sakura"><i class="fa-solid fa-bars" aria-hidden="true"></i></button>
-                <!-- Mobile back navigation button -->
-            <button id="mobile-back-btn" onclick="goBack()" class="md:hidden flex items-center space-x-1 px-3 py-1.5 rounded-sm bg-washi-200 text-washi-900 text-xs font-semibold uppercase tracking-wider hover:bg-sakura hover:text-white transition-all hidden">
-                <i class="fa-solid fa-chevron-left"></i> <span>Back</span>
-            </button>
+
+            <!-- Navigation Links Bar: Always visible on Mobile phones & Desktop -->
+            <div class="flex items-center space-x-5 md:space-x-8 font-sans text-xs tracking-widest uppercase font-medium overflow-x-auto w-full md:w-auto py-1 md:py-0 border-t md:border-t-0 border-washi-200/60 md:border-none scrollbar-none justify-start md:justify-end">
+                <button onclick="navigateTo('home-view')" class="hover:text-sakura transition-colors relative py-1 shrink-0 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1px] after:bg-sakura hover:after:w-full after:transition-all">Home</button>
+                <button onclick="openStoriesIndex()" class="hover:text-sakura transition-colors relative py-1 shrink-0 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1px] after:bg-sakura hover:after:w-full after:transition-all">Stories</button>
+                <button onclick="openPoemsIndex()" class="hover:text-sakura transition-colors relative py-1 shrink-0 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1px] after:bg-sakura hover:after:w-full after:transition-all">Poetry</button>
+                <button onclick="openNotesIndex()" class="hover:text-sakura transition-colors relative py-1 shrink-0 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1px] after:bg-sakura hover:after:w-full after:transition-all">Reflections</button>
+                <button onclick="openAdmin()" class="hover:text-sakura transition-colors relative py-1 shrink-0 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1px] after:bg-sakura hover:after:w-full after:transition-all">Manage</button>
             </div>
-        </div>
-        <div id="mobile-nav-panel" class="mobile-nav-panel max-w-5xl mx-auto mt-3 border-t border-washi-200 pt-2 gap-1 font-sans text-xs tracking-widest uppercase font-medium" aria-label="Mobile navigation">
-            <button type="button" onclick="mobileNavigate('home-view')">Home</button>
-            <button type="button" onclick="mobileNavigate('stories-index-view')">Stories</button>
-            <button type="button" onclick="mobileNavigate('poems-index-view')">Poetry</button>
-            <button type="button" onclick="mobileNavigate('notes-index-view')">Reflections</button>
-            <button type="button" onclick="mobileNavigate('admin-view')">Manage</button>
         </div>
     </nav>
 
@@ -425,8 +425,9 @@
                 </div>
                 <!-- Simple Elegant Search -->
                 <div class="relative w-full md:w-64">
-                    <label for="story-search" class="sr-only">Search stories</label><input type="search" id="story-search" name="story-search" autocomplete="off" oninput="filterStories()" placeholder="Search archive…" aria-label="Search stories" class="w-full pl-9 pr-4 py-2 bg-washi-50 border border-washi-200 rounded-sm text-xs text-washi-900 placeholder-washi-800 focus:outline-none focus:ring-[1px] focus:ring-sakura transition-all">
-                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-4 text-washi-800 text-[10px]" aria-hidden="true"></i>
+                    <label for="story-search" class="sr-only">Search stories</label>
+                    <input type="search" id="story-search" name="story-search" autocomplete="off" oninput="filterStories()" placeholder="Search archive…" aria-label="Search stories" class="w-full pl-9 pr-4 py-2 bg-washi-50 border border-washi-200 rounded-sm text-xs text-washi-900 placeholder-washi-800 focus:outline-none focus:ring-[1px] focus:ring-sakura transition-all">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-3.5 text-washi-800 text-[10px]" aria-hidden="true"></i>
                 </div>
             </div>
 
@@ -533,8 +534,9 @@
                 </div>
                 <!-- Clean Search for poems -->
                 <div class="relative w-full md:w-64">
-                    <label for="poem-search" class="sr-only">Filter poetry collections</label><input type="search" id="poem-search" name="poem-search" autocomplete="off" oninput="filterPoems()" placeholder="Filter collections…" aria-label="Filter poetry collections" class="w-full pl-9 pr-4 py-2 bg-washi-50 border border-washi-200 rounded-sm text-xs text-washi-900 placeholder-washi-800 focus:outline-none focus:ring-[1px] focus:ring-sakura transition-all">
-                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-4 text-washi-800 text-[10px]" aria-hidden="true"></i>
+                    <label for="poem-search" class="sr-only">Filter poetry collections</label>
+                    <input type="search" id="poem-search" name="poem-search" autocomplete="off" oninput="filterPoems()" placeholder="Filter collections…" aria-label="Filter poetry collections" class="w-full pl-9 pr-4 py-2 bg-washi-50 border border-washi-200 rounded-sm text-xs text-washi-900 placeholder-washi-800 focus:outline-none focus:ring-[1px] focus:ring-sakura transition-all">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-3.5 text-washi-800 text-[10px]" aria-hidden="true"></i>
                 </div>
             </div>
 
@@ -602,20 +604,47 @@
         <!-- 8. CONTENT STUDIO -->
         <section id="admin-view" class="view-transition view-hidden space-y-8">
             <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-washi-200 pb-6">
-                <div><p class="text-[10px] uppercase tracking-[0.25em] text-sakura font-semibold">Content studio</p><h2 class="text-3xl font-serif font-bold text-washi-900">Manage the archive</h2><p class="text-washi-800 text-xs mt-2">Drafts stay in this browser. Export a JSON copy whenever you like.</p></div>
-                <div class="studio-actions flex flex-wrap gap-2"><button type="button" onclick="exportContent()" class="px-3 py-2 bg-washi-900 text-washi-50 text-[10px] uppercase tracking-widest rounded-sm">Export JSON</button><button type="button" onclick="document.getElementById('import-file').click()" class="px-3 py-2 border border-washi-300 text-[10px] uppercase tracking-widest rounded-sm">Import JSON</button><button type="button" onclick="resetContent()" class="px-3 py-2 border border-sakura text-sakura text-[10px] uppercase tracking-widest rounded-sm">Reset demo</button><input id="import-file" type="file" accept="application/json,.json" class="hidden" onchange="importContent(event)"></div>
+                <div>
+                    <p class="text-[10px] uppercase tracking-[0.25em] text-sakura font-semibold">Content studio</p>
+                    <h2 class="text-3xl font-serif font-bold text-washi-900">Manage the archive</h2>
+                    <p class="text-washi-800 text-xs mt-2">Drafts stay in this browser. Export a JSON copy whenever you like.</p>
+                </div>
+                <div class="studio-actions flex flex-wrap gap-2">
+                    <button type="button" onclick="exportContent()" class="px-3 py-2 bg-washi-900 text-washi-50 text-[10px] uppercase tracking-widest rounded-sm">Export JSON</button>
+                    <button type="button" onclick="document.getElementById('import-file').click()" class="px-3 py-2 border border-washi-300 text-[10px] uppercase tracking-widest rounded-sm">Import JSON</button>
+                    <button type="button" onclick="resetContent()" class="px-3 py-2 border border-sakura text-sakura text-[10px] uppercase tracking-widest rounded-sm">Reset demo</button>
+                    <input id="import-file" type="file" accept="application/json,.json" class="hidden" onchange="importContent(event)">
+                </div>
             </div>
             <div id="admin-status" role="status" aria-live="polite" class="text-xs text-sakura min-h-[1.25rem]"></div>
             <div class="grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-8">
-                <div class="space-y-4"><div class="flex items-center justify-between"><h3 class="font-serif text-xl text-washi-900">Your entries</h3><button type="button" onclick="newEntry()" class="text-xs text-sakura uppercase tracking-widest">+ New entry</button></div><div id="admin-entry-list" class="space-y-2"></div></div>
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-serif text-xl text-washi-900">Your entries</h3>
+                        <button type="button" onclick="newEntry()" class="text-xs text-sakura uppercase tracking-widest">+ New entry</button>
+                    </div>
+                    <div id="admin-entry-list" class="space-y-2"></div>
+                </div>
                 <form id="content-form" class="content-form space-y-4 bg-washi-100 p-6 border border-washi-200 rounded-sm" onsubmit="saveEntry(event)">
-                    <input type="hidden" id="entry-id"><label for="entry-type" class="block text-xs uppercase tracking-widest text-washi-800">Type<select id="entry-type" name="type" onchange="renderEditorFields()" class="mt-2 w-full p-2 bg-washi-50 border border-washi-200 rounded-sm"><option value="story">Story</option><option value="poem">Poem</option><option value="note">Reflection / note</option></select></label>
-                    <div id="editor-fields"></div><div class="flex gap-3 pt-2"><button class="px-4 py-2 bg-sakura text-white text-xs uppercase tracking-widest rounded-sm" type="submit">Save draft</button><button class="px-4 py-2 border border-washi-300 text-xs uppercase tracking-widest rounded-sm" type="button" onclick="newEntry()">Clear</button></div>
+                    <input type="hidden" id="entry-id">
+                    <label for="entry-type" class="block text-xs uppercase tracking-widest text-washi-800">
+                        Type
+                        <select id="entry-type" name="type" onchange="renderEditorFields()" class="mt-2 w-full p-2 bg-washi-50 border border-washi-200 rounded-sm">
+                            <option value="story">Story</option>
+                            <option value="poem">Poem</option>
+                            <option value="note">Reflection / note</option>
+                        </select>
+                    </label>
+                    <div id="editor-fields"></div>
+                    <div class="flex gap-3 pt-2">
+                        <button class="px-4 py-2 bg-sakura text-white text-xs uppercase tracking-widest rounded-sm" type="submit">Save draft</button>
+                        <button class="px-4 py-2 border border-washi-300 text-xs uppercase tracking-widest rounded-sm" type="button" onclick="newEntry()">Clear</button>
+                    </div>
                 </form>
             </div>
         </section>
 
-        <!-- 8. NOTE DETAIL VIEW -->
+        <!-- 9. NOTE DETAIL VIEW -->
         <section id="note-detail-view" class="view-transition view-hidden max-w-xl mx-auto space-y-8">
             <div>
                 <button onclick="navigateTo('notes-index-view')" class="text-xs text-sakura font-sans uppercase tracking-widest font-semibold hover:underline inline-flex items-center space-x-1">
@@ -646,13 +675,16 @@
                 <span class="w-6 h-6 rounded-full bg-washi-200 text-washi-900 font-serif flex items-center justify-center text-[10px]">栞</span>
                 <span class="font-serif font-semibold tracking-widest text-washi-900">SHIORI © 2026</span>
             </div>
-            <div class="text-center md:text-right space-y-1"><p class="font-light uppercase text-[9px] tracking-widest">Wabi-Sabi minimalist digital repository. Quiet reading for focused minds.</p><p class="text-[10px] text-sakura">Client-only drafts stay in this browser ? Export from Manage Content to keep a copy.</p></div>
+            <div class="text-center md:text-right space-y-1">
+                <p class="font-light uppercase text-[9px] tracking-widest">Wabi-Sabi minimalist digital repository. Quiet reading for focused minds.</p>
+                <p class="text-[10px] text-sakura">Client-only drafts stay in this browser · Export from Manage Content to keep a copy.</p>
+            </div>
         </div>
     </footer>
 
     <script>
         // ==========================================================
-        // 1. DATA REPOS (Fully customizable by editing below)
+        // 1. DATA REPOS (Fully customizable)
         // ==========================================================
 
         let STORIES_DATA = [
@@ -722,42 +754,85 @@
             }
         ];
 
-
         const CONTENT_STORAGE_KEY = 'shiori-content-v1';
         const SETTINGS_STORAGE_KEY = 'shiori-settings-v1';
         const DEMO_CONTENT = { stories: STORIES_DATA, poems: POEMS_DATA, notes: NOTES_DATA };
         let contentStore = null;
+
         function clone(value) { return JSON.parse(JSON.stringify(value)); }
+
         function normalizeContent(value) {
-            if (!value || typeof value !== 'object' || !Array.isArray(value.stories) || !Array.isArray(value.poems) || !Array.isArray(value.notes)) throw new Error('JSON must contain stories, poems, and notes arrays.');
+            if (!value || typeof value !== 'object' || !Array.isArray(value.stories) || !Array.isArray(value.poems) || !Array.isArray(value.notes)) {
+                throw new Error('JSON must contain stories, poems, and notes arrays.');
+            }
             const clean = { stories: value.stories, poems: value.poems, notes: value.notes };
-            clean.stories = clean.stories.map(s => { if (!s || !s.id || !s.title || !Array.isArray(s.chapters)) throw new Error('Every story needs an id, title, and chapters array.'); return { ...s, author: String(s.author || 'Shiori Scribe'), summary: String(s.summary || ''), tags: Array.isArray(s.tags) ? s.tags.map(String) : [], chapters: s.chapters.map((ch, i) => ({ id: String(ch.id || s.id + '-c' + (i + 1)), title: String(ch.title || 'Untitled chapter'), content: String(ch.content || '') })) }; });
-            clean.poems = clean.poems.map(x => { if (!x || !x.id || !x.title || typeof x.content !== 'string') throw new Error('Every poem needs an id, title, and content.'); return { ...x, title: String(x.title), tags: Array.isArray(x.tags) ? x.tags.map(String) : [] }; });
-            clean.notes = clean.notes.map(x => { if (!x || !x.id || !x.title || typeof x.content !== 'string') throw new Error('Every note needs an id, title, and content.'); return { ...x, title: String(x.title), date: String(x.date || ''), tags: Array.isArray(x.tags) ? x.tags.map(String) : [] }; });
+            clean.stories = clean.stories.map(s => { 
+                if (!s || !s.id || !s.title || !Array.isArray(s.chapters)) throw new Error('Every story needs an id, title, and chapters array.'); 
+                return { ...s, author: String(s.author || 'Shiori Scribe'), summary: String(s.summary || ''), tags: Array.isArray(s.tags) ? s.tags.map(String) : [], chapters: s.chapters.map((ch, i) => ({ id: String(ch.id || s.id + '-c' + (i + 1)), title: String(ch.title || 'Untitled chapter'), content: String(ch.content || '') })) }; 
+            });
+            clean.poems = clean.poems.map(x => { 
+                if (!x || !x.id || !x.title || typeof x.content !== 'string') throw new Error('Every poem needs an id, title, and content.'); 
+                return { ...x, title: String(x.title), tags: Array.isArray(x.tags) ? x.tags.map(String) : [] }; 
+            });
+            clean.notes = clean.notes.map(x => { 
+                if (!x || !x.id || !x.title || typeof x.content !== 'string') throw new Error('Every note needs an id, title, and content.'); 
+                return { ...x, title: String(x.title), date: String(x.date || ''), tags: Array.isArray(x.tags) ? x.tags.map(String) : [] }; 
+            });
             return clean;
         }
-        function persistContent() { localStorage.setItem(CONTENT_STORAGE_KEY, JSON.stringify({ version: 1, updatedAt: new Date().toISOString(), ...contentStore })); }
-        function loadContent() {
-            try { const saved = JSON.parse(localStorage.getItem(CONTENT_STORAGE_KEY) || 'null'); return saved ? normalizeContent(saved) : clone(DEMO_CONTENT); }
-            catch (error) { console.warn('Shiori content reset after invalid local data', error); return clone(DEMO_CONTENT); }
-        }
-        function syncData() { STORIES_DATA = contentStore.stories; POEMS_DATA = contentStore.poems; NOTES_DATA = contentStore.notes; }
-        function escapeHTML(value) { const div = document.createElement('div'); div.textContent = String(value ?? ''); return div.innerHTML; }
-        function makeId(prefix) { return prefix + '-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2,7); }
-        function settings() { try { return JSON.parse(localStorage.getItem(SETTINGS_STORAGE_KEY) || '{}'); } catch (_) { return {}; } }
-        function saveSettings(next) { localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify({ ...settings(), ...next })); }
 
-        // ==========================================================
-        // 2. VIEW NAVIGATION & STATE ENGINE (Integrated Splash Exit)
-        // ==========================================================
+        function persistContent() { localStorage.setItem(CONTENT_STORAGE_KEY, JSON.stringify({ version: 1, updatedAt: new Date().toISOString(), ...contentStore })); }
+
+        function loadContent() {
+            try { 
+                const saved = JSON.parse(localStorage.getItem(CONTENT_STORAGE_KEY) || 'null'); 
+                return saved ? normalizeContent(saved) : clone(DEMO_CONTENT); 
+            } catch (error) { 
+                console.warn('Shiori content reset after invalid local data', error); 
+                return clone(DEMO_CONTENT); 
+            }
+        }
+
+        function syncData() { 
+            STORIES_DATA = contentStore.stories; 
+            POEMS_DATA = contentStore.poems; 
+            NOTES_DATA = contentStore.notes; 
+        }
+
+        function escapeHTML(value) { 
+            const div = document.createElement('div'); 
+            div.textContent = String(value ?? ''); 
+            return div.innerHTML; 
+        }
+
+        function makeId(prefix) { 
+            return prefix + '-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 7); 
+        }
+
+        function settings() { 
+            try { return JSON.parse(localStorage.getItem(SETTINGS_STORAGE_KEY) || '{}'); } 
+            catch (_) { return {}; } 
+        }
+
+        function saveSettings(next) { 
+            localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify({ ...settings(), ...next })); 
+        }
+
         let currentHistory = ['home-view'];
         let activeStoryId = null;
         let activeStoryTab = 'summary'; 
         let readerFontSize = 17;
 
         window.onload = function() {
-            contentStore = loadContent(); syncData();
-            const savedSettings = settings(); readerFontSize = Number(savedSettings.readerFontSize) || 17; if (savedSettings.dark) { document.body.classList.add('theme-dark'); document.getElementById('theme-toggle').innerHTML = '<i class="fa-solid fa-sun"></i>'; }
+            contentStore = loadContent(); 
+            syncData();
+            const savedSettings = settings(); 
+            readerFontSize = Number(savedSettings.readerFontSize) || 17; 
+            if (savedSettings.dark) { 
+                document.body.classList.add('theme-dark'); 
+                document.getElementById('theme-toggle').innerHTML = '<i class="fa-solid fa-sun"></i>'; 
+            }
+            
             // Populate initial records
             renderStoriesGrid();
             renderPoemsGrid();
@@ -777,12 +852,11 @@
                 const splash = document.getElementById('splash-screen');
                 if (splash) {
                     splash.classList.add('splash-fade-out');
-                    // Fully detach from document flow once faded out
                     setTimeout(() => {
                         splash.style.display = 'none';
                     }, 1000);
                 }
-            }, 3200); // Gives user enough time to appreciate the pristine layout sequence
+            }, 3000);
         };
 
         function navigateTo(viewId, pushToHistory = true) {
@@ -794,13 +868,15 @@
 
             views.forEach(v => {
                 const el = document.getElementById(v);
-                if (v === viewId) {
-                    el.classList.remove('view-hidden');
-                    el.classList.add('view-visible');
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                } else {
-                    el.classList.add('view-hidden');
-                    el.classList.remove('view-visible');
+                if (el) {
+                    if (v === viewId) {
+                        el.classList.remove('view-hidden');
+                        el.classList.add('view-visible');
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    } else {
+                        el.classList.add('view-hidden');
+                        el.classList.remove('view-visible');
+                    }
                 }
             });
 
@@ -808,12 +884,14 @@
                 currentHistory.push(viewId);
             }
 
-            // Mobile Navigation responsive toggle
+            // Mobile Navigation back button responsive toggle
             const backBtn = document.getElementById('mobile-back-btn');
-            if (viewId === 'home-view') {
-                backBtn.classList.add('hidden');
-            } else {
-                backBtn.classList.remove('hidden');
+            if (backBtn) {
+                if (viewId === 'home-view') {
+                    backBtn.classList.add('hidden');
+                } else {
+                    backBtn.classList.remove('hidden');
+                }
             }
         }
 
@@ -834,50 +912,240 @@
             }
         }
 
-        function toggleMobileNav() {
-            const panel = document.getElementById('mobile-nav-panel');
-            const trigger = document.getElementById('mobile-menu-trigger');
-            const isOpen = panel.classList.toggle('is-open');
-            trigger.setAttribute('aria-expanded', String(isOpen));
-            trigger.setAttribute('aria-label', isOpen ? 'Close navigation menu' : 'Open navigation menu');
-            trigger.querySelector('i').className = isOpen ? 'fa-solid fa-xmark' : 'fa-solid fa-bars';
+        function toggleTheme() { 
+            const dark = document.body.classList.toggle('theme-dark'); 
+            saveSettings({ dark }); 
+            document.getElementById('theme-toggle').innerHTML = dark ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>'; 
         }
 
-        function mobileNavigate(viewId) {
-            navigateTo(viewId);
-            const panel = document.getElementById('mobile-nav-panel');
-            if (panel.classList.contains('is-open')) toggleMobileNav();
+        function openAdmin() { 
+            renderAdminList(); 
+            newEntry(); 
+            navigateTo('admin-view'); 
         }
 
+        function setAdminStatus(message, error) { 
+            const el = document.getElementById('admin-status'); 
+            if (el) {
+                el.textContent = message; 
+                el.className = 'text-xs min-h-[1.25rem] ' + (error ? 'text-red-700' : 'text-sakura'); 
+            }
+        }
 
-        function toggleTheme() { const dark = document.body.classList.toggle('theme-dark'); saveSettings({ dark }); document.getElementById('theme-toggle').innerHTML = dark ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>'; }
-        function openAdmin() { renderAdminList(); newEntry(); navigateTo('admin-view'); }
-        function setAdminStatus(message, error) { const el = document.getElementById('admin-status'); el.textContent = message; el.className = 'text-xs min-h-[1.25rem] ' + (error ? 'text-red-700' : 'text-sakura'); }
         function renderAdminList() {
-            const list = document.getElementById('admin-entry-list'); list.textContent = '';
-            [['story','Stories',contentStore.stories],['poem','Poems',contentStore.poems],['note','Reflections',contentStore.notes]].forEach(([type,label,items]) => { const heading=document.createElement('p'); heading.className='text-[10px] uppercase tracking-widest text-sakura pt-3'; heading.textContent=label; list.appendChild(heading); items.forEach(item => { const row=document.createElement('div'); row.className='flex items-center justify-between gap-3 p-3 border border-washi-200 bg-washi-50 rounded-sm'; const title=document.createElement('button'); title.type='button'; title.className='text-left font-serif text-sm text-washi-900 truncate'; title.textContent=item.title; title.onclick=()=>editEntry(type,item.id); const del=document.createElement('button'); del.type='button'; del.className='text-xs text-sakura'; del.textContent='Delete'; del.onclick=()=>deleteEntry(type,item.id); row.append(title,del); list.appendChild(row); }); });
+            const list = document.getElementById('admin-entry-list'); 
+            if (!list) return;
+            list.textContent = '';
+            [['story','Stories',contentStore.stories],['poem','Poems',contentStore.poems],['note','Reflections',contentStore.notes]].forEach(([type,label,items]) => { 
+                const heading = document.createElement('p'); 
+                heading.className = 'text-[10px] uppercase tracking-widest text-sakura pt-3 font-semibold'; 
+                heading.textContent = label; 
+                list.appendChild(heading); 
+                items.forEach(item => { 
+                    const row = document.createElement('div'); 
+                    row.className = 'flex items-center justify-between gap-3 p-3 border border-washi-200 bg-washi-50 rounded-sm'; 
+                    const title = document.createElement('button'); 
+                    title.type = 'button'; 
+                    title.className = 'text-left font-serif text-sm text-washi-900 truncate flex-1'; 
+                    title.textContent = item.title; 
+                    title.onclick = () => editEntry(type, item.id); 
+                    const del = document.createElement('button'); 
+                    del.type = 'button'; 
+                    del.className = 'text-xs text-sakura px-2 py-1'; 
+                    del.textContent = 'Delete'; 
+                    del.onclick = () => deleteEntry(type, item.id); 
+                    row.append(title, del); 
+                    list.appendChild(row); 
+                }); 
+            });
         }
-        function renderEditorFields(entry) {
-            const type=document.getElementById('entry-type').value, f=document.getElementById('editor-fields'); f.textContent='';
-            const field=(id,label,value,area=false)=>{ const l=document.createElement('label'); l.className='block text-xs uppercase tracking-widest text-washi-800'; l.textContent=label; const el=document.createElement(area?'textarea':'input'); el.id=id; el.name=id; el.value=value||''; el.required=id==='edit-title'||id==='edit-content'; el.rows=area?7:1; el.className='mt-2 w-full p-2 bg-washi-50 border border-washi-200 rounded-sm text-sm normal-case tracking-normal'; l.appendChild(el); f.appendChild(l); };
-            field('edit-title','Title',entry?.title);
-            if(type==='story') { field('edit-author','Author',entry?.author||'Shiori Scribe'); field('edit-summary','Summary',entry?.summary,true); field('edit-tags','Tags (comma separated)',(entry?.tags||[]).join(', ')); const wrap=document.createElement('div'); wrap.id='chapter-editor'; wrap.className='space-y-3'; f.appendChild(wrap); (entry?.chapters||[{title:'',content:''}]).forEach(ch=>addChapterField(ch)); const add=document.createElement('button'); add.type='button'; add.className='text-xs text-sakura uppercase tracking-widest'; add.textContent='+ Add chapter'; add.onclick=()=>addChapterField(); f.appendChild(add); } else if(type==='note') { field('edit-date','Date',entry?.date || new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'})); field('edit-content','Entry',entry?.content,true); field('edit-tags','Tags (comma separated)',(entry?.tags||[]).join(', ')); } else { field('edit-content','Poem',entry?.content,true); field('edit-tags','Tags (comma separated)',(entry?.tags||[]).join(', ')); }
-        }
-        function addChapterField(ch={}) { const wrap=document.getElementById('chapter-editor'); if(!wrap)return; const box=document.createElement('div'); box.className='chapter-field border border-washi-200 p-3 space-y-2'; const title=document.createElement('input'); title.className='chapter-title w-full p-2 bg-washi-50 border border-washi-200 text-sm'; title.placeholder='Chapter title'; title.value=ch.title||''; const content=document.createElement('textarea'); content.className='chapter-content w-full p-2 bg-washi-50 border border-washi-200 text-sm'; content.rows=4; content.placeholder='Chapter text'; content.value=ch.content||''; const remove=document.createElement('button'); remove.type='button'; remove.className='text-[10px] text-sakura uppercase tracking-widest'; remove.textContent='Remove chapter'; remove.onclick=()=>box.remove(); box.append(title,content,remove); wrap.appendChild(box); }
-        function newEntry() { document.getElementById('entry-id').value=''; document.getElementById('entry-type').value='story'; renderEditorFields(); }
-        function editEntry(type,id) { const source=type==='story'?contentStore.stories:type==='poem'?contentStore.poems:contentStore.notes; const entry=source.find(x=>x.id===id); document.getElementById('entry-id').value=id; document.getElementById('entry-type').value=type; renderEditorFields(entry); }
-        function saveEntry(event) { event.preventDefault(); const type=document.getElementById('entry-type').value, id=document.getElementById('entry-id').value || makeId(type); let entry={id,title:document.getElementById('edit-title').value.trim()}; if(!entry.title){setAdminStatus('A title is required.',true);return;} if(type==='story'){ entry.author=document.getElementById('edit-author').value.trim(); entry.summary=document.getElementById('edit-summary').value.trim(); entry.tags=(document.getElementById('edit-tags').value||'').split(',').map(x=>x.trim()).filter(Boolean); entry.chapters=[...document.querySelectorAll('.chapter-field')].map((box,i)=>({id:id+'-c'+(i+1),title:box.querySelector('.chapter-title').value.trim()||'Untitled chapter',content:box.querySelector('.chapter-content').value})); if(!entry.chapters.length){setAdminStatus('Add at least one chapter.',true);return;} } else { entry.content=document.getElementById('edit-content').value; entry.tags=(document.getElementById('edit-tags').value||'').split(',').map(x=>x.trim()).filter(Boolean); if(type==='note') entry.date=document.getElementById('edit-date').value.trim(); } const target=type==='story'?contentStore.stories:type==='poem'?contentStore.poems:contentStore.notes; const index=target.findIndex(x=>x.id===id); if(index>=0) target[index]=entry; else target.push(entry); syncData(); persistContent(); renderAdminList(); renderStoriesGrid(); renderPoemsGrid(); renderNotesGrid(); setAdminStatus('Draft saved locally.'); document.getElementById('entry-id').value=id; }
-        function deleteEntry(type,id) { if(!confirm('Delete this entry from local drafts?'))return; const target=type==='story'?contentStore.stories:type==='poem'?contentStore.poems:contentStore.notes; const index=target.findIndex(x=>x.id===id); if(index>=0)target.splice(index,1); syncData(); persistContent(); renderAdminList(); renderStoriesGrid(); renderPoemsGrid(); renderNotesGrid(); setAdminStatus('Entry deleted locally.'); }
-        function exportContent() { const blob=new Blob([JSON.stringify({version:1,exportedAt:new Date().toISOString(),...contentStore},null,2)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='shiori-content.json'; a.click(); URL.revokeObjectURL(a.href); setAdminStatus('JSON export downloaded.'); }
-        function importContent(event) { const file=event.target.files[0]; if(!file)return; const reader=new FileReader(); reader.onload=()=>{ try{const imported=normalizeContent(JSON.parse(reader.result)); contentStore=imported; syncData(); persistContent(); renderAdminList(); renderStoriesGrid(); renderPoemsGrid(); renderNotesGrid(); setAdminStatus('Import complete. Drafts are stored in this browser.');}catch(error){setAdminStatus('Import failed: '+error.message,true);} event.target.value=''; }; reader.readAsText(file); }
-        function resetContent() { if(!confirm('Reset all local drafts to the original demo data?'))return; contentStore=clone(DEMO_CONTENT); syncData(); persistContent(); renderAdminList(); renderStoriesGrid(); renderPoemsGrid(); renderNotesGrid(); newEntry(); setAdminStatus('Demo data restored.'); }
 
-        // ==========================================================
-        // 3. STORY ARCHIVE LOGIC
-        // ==========================================================
+        function renderEditorFields(entry) {
+            const type = document.getElementById('entry-type').value;
+            const f = document.getElementById('editor-fields'); 
+            if (!f) return;
+            f.textContent = '';
+            const field = (id, label, value, area = false) => { 
+                const l = document.createElement('label'); 
+                l.className = 'block text-xs uppercase tracking-widest text-washi-800'; 
+                l.textContent = label; 
+                const el = document.createElement(area ? 'textarea' : 'input'); 
+                el.id = id; 
+                el.name = id; 
+                el.value = value || ''; 
+                el.required = id === 'edit-title' || id === 'edit-content'; 
+                el.rows = area ? 7 : 1; 
+                el.className = 'mt-2 w-full p-2 bg-washi-50 border border-washi-200 rounded-sm text-sm normal-case tracking-normal'; 
+                l.appendChild(el); 
+                f.appendChild(l); 
+            };
+            field('edit-title', 'Title', entry?.title);
+            if (type === 'story') { 
+                field('edit-author', 'Author', entry?.author || 'Shiori Scribe'); 
+                field('edit-summary', 'Summary', entry?.summary, true); 
+                field('edit-tags', 'Tags (comma separated)', (entry?.tags || []).join(', ')); 
+                const wrap = document.createElement('div'); 
+                wrap.id = 'chapter-editor'; 
+                wrap.className = 'space-y-3'; 
+                f.appendChild(wrap); 
+                (entry?.chapters || [{ title: '', content: '' }]).forEach(ch => addChapterField(ch)); 
+                const add = document.createElement('button'); 
+                add.type = 'button'; 
+                add.className = 'text-xs text-sakura uppercase tracking-widest'; 
+                add.textContent = '+ Add chapter'; 
+                add.onclick = () => addChapterField(); 
+                f.appendChild(add); 
+            } else if (type === 'note') { 
+                field('edit-date', 'Date', entry?.date || new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' })); 
+                field('edit-content', 'Entry', entry?.content, true); 
+                field('edit-tags', 'Tags (comma separated)', (entry?.tags || []).join(', ')); 
+            } else { 
+                field('edit-content', 'Poem', entry?.content, true); 
+                field('edit-tags', 'Tags (comma separated)', (entry?.tags || []).join(', ')); 
+            }
+        }
+
+        function addChapterField(ch = {}) { 
+            const wrap = document.getElementById('chapter-editor'); 
+            if (!wrap) return; 
+            const box = document.createElement('div'); 
+            box.className = 'chapter-field border border-washi-200 p-3 space-y-2'; 
+            const title = document.createElement('input'); 
+            title.className = 'chapter-title w-full p-2 bg-washi-50 border border-washi-200 text-sm'; 
+            title.placeholder = 'Chapter title'; 
+            title.value = ch.title || ''; 
+            const content = document.createElement('textarea'); 
+            content.className = 'chapter-content w-full p-2 bg-washi-50 border border-washi-200 text-sm'; 
+            content.rows = 4; 
+            content.placeholder = 'Chapter text'; 
+            content.value = ch.content || ''; 
+            const remove = document.createElement('button'); 
+            remove.type = 'button'; 
+            remove.className = 'text-[10px] text-sakura uppercase tracking-widest'; 
+            remove.textContent = 'Remove chapter'; 
+            remove.onclick = () => box.remove(); 
+            box.append(title, content, remove); 
+            wrap.appendChild(box); 
+        }
+
+        function newEntry() { 
+            document.getElementById('entry-id').value = ''; 
+            document.getElementById('entry-type').value = 'story'; 
+            renderEditorFields(); 
+        }
+
+        function editEntry(type, id) { 
+            const source = type === 'story' ? contentStore.stories : type === 'poem' ? contentStore.poems : contentStore.notes; 
+            const entry = source.find(x => x.id === id); 
+            document.getElementById('entry-id').value = id; 
+            document.getElementById('entry-type').value = type; 
+            renderEditorFields(entry); 
+        }
+
+        function saveEntry(event) { 
+            event.preventDefault(); 
+            const type = document.getElementById('entry-type').value;
+            const id = document.getElementById('entry-id').value || makeId(type); 
+            let entry = { id, title: document.getElementById('edit-title').value.trim() }; 
+            if (!entry.title) { 
+                setAdminStatus('A title is required.', true); 
+                return; 
+            } 
+            if (type === 'story') { 
+                entry.author = document.getElementById('edit-author').value.trim(); 
+                entry.summary = document.getElementById('edit-summary').value.trim(); 
+                entry.tags = (document.getElementById('edit-tags').value || '').split(',').map(x => x.trim()).filter(Boolean); 
+                entry.chapters = [...document.querySelectorAll('.chapter-field')].map((box, i) => ({ 
+                    id: id + '-c' + (i + 1), 
+                    title: box.querySelector('.chapter-title').value.trim() || 'Untitled chapter', 
+                    content: box.querySelector('.chapter-content').value 
+                })); 
+                if (!entry.chapters.length) { 
+                    setAdminStatus('Add at least one chapter.', true); 
+                    return; 
+                } 
+            } else { 
+                entry.content = document.getElementById('edit-content').value; 
+                entry.tags = (document.getElementById('edit-tags').value || '').split(',').map(x => x.trim()).filter(Boolean); 
+                if (type === 'note') entry.date = document.getElementById('edit-date').value.trim(); 
+            } 
+            const target = type === 'story' ? contentStore.stories : type === 'poem' ? contentStore.poems : contentStore.notes; 
+            const index = target.findIndex(x => x.id === id); 
+            if (index >= 0) target[index] = entry; 
+            else target.push(entry); 
+            syncData(); 
+            persistContent(); 
+            renderAdminList(); 
+            renderStoriesGrid(); 
+            renderPoemsGrid(); 
+            renderNotesGrid(); 
+            setAdminStatus('Draft saved locally.'); 
+            document.getElementById('entry-id').value = id; 
+        }
+
+        function deleteEntry(type, id) { 
+            const target = type === 'story' ? contentStore.stories : type === 'poem' ? contentStore.poems : contentStore.notes; 
+            const index = target.findIndex(x => x.id === id); 
+            if (index >= 0) {
+                target.splice(index, 1); 
+                syncData(); 
+                persistContent(); 
+                renderAdminList(); 
+                renderStoriesGrid(); 
+                renderPoemsGrid(); 
+                renderNotesGrid(); 
+                setAdminStatus('Entry removed.'); 
+            }
+        }
+
+        function exportContent() { 
+            const blob = new Blob([JSON.stringify({ version: 1, exportedAt: new Date().toISOString(), ...contentStore }, null, 2)], { type: 'application/json' }); 
+            const a = document.createElement('a'); 
+            a.href = URL.createObjectURL(blob); 
+            a.download = 'shiori-content.json'; 
+            a.click(); 
+            URL.revokeObjectURL(a.href); 
+            setAdminStatus('JSON export downloaded.'); 
+        }
+
+        function importContent(event) { 
+            const file = event.target.files[0]; 
+            if (!file) return; 
+            const reader = new FileReader(); 
+            reader.onload = () => { 
+                try { 
+                    const imported = normalizeContent(JSON.parse(reader.result)); 
+                    contentStore = imported; 
+                    syncData(); 
+                    persistContent(); 
+                    renderAdminList(); 
+                    renderStoriesGrid(); 
+                    renderPoemsGrid(); 
+                    renderNotesGrid(); 
+                    setAdminStatus('Import complete. Drafts loaded.'); 
+                } catch (error) { 
+                    setAdminStatus('Import failed: ' + error.message, true); 
+                } 
+                event.target.value = ''; 
+            }; 
+            reader.readAsText(file); 
+        }
+
+        function resetContent() { 
+            contentStore = clone(DEMO_CONTENT); 
+            syncData(); 
+            persistContent(); 
+            renderAdminList(); 
+            renderStoriesGrid(); 
+            renderPoemsGrid(); 
+            renderNotesGrid(); 
+            newEntry(); 
+            setAdminStatus('Original demo data restored.'); 
+        }
 
         function renderStoriesGrid(filteredList = STORIES_DATA) {
             const grid = document.getElementById('stories-grid');
+            if (!grid) return;
             grid.innerHTML = '';
 
             if (filteredList.length === 0) {
@@ -922,7 +1190,8 @@
         }
 
         function openStoriesIndex() {
-            document.getElementById('story-search').value = '';
+            const searchInput = document.getElementById('story-search');
+            if (searchInput) searchInput.value = '';
             renderStoriesGrid();
             navigateTo('stories-index-view');
         }
@@ -984,10 +1253,6 @@
             }
         }
 
-
-        // ==========================================================
-        // 4. PERSISTENT READER SETTINGS
-        // ==========================================================
         let currentChapterIndex = 0;
 
         function openChapterReader(storyId, chapterIndex) {
@@ -1026,7 +1291,6 @@
             }
 
             document.getElementById('chapter-back-text').innerText = story.title;
-
             navigateTo('chapter-reading-view');
         }
 
@@ -1034,7 +1298,6 @@
             readerFontSize = Math.min(Math.max(13, readerFontSize + change), 26);
             saveSettings({ readerFontSize });
             
-            // Scaling up / down readers
             const chapterContent = document.getElementById('chapter-reading-content');
             if (chapterContent) {
                 chapterContent.style.fontSize = `${readerFontSize}px`;
@@ -1050,13 +1313,9 @@
             if (indicator2) indicator2.innerText = `${readerFontSize + 2}px`;
         }
 
-
-        // ==========================================================
-        // 5. POETRY ARCHIVE LOGIC
-        // ==========================================================
-
         function renderPoemsGrid(filteredList = POEMS_DATA) {
             const grid = document.getElementById('poems-grid');
+            if (!grid) return;
             grid.innerHTML = '';
 
             if (filteredList.length === 0) {
@@ -1093,7 +1352,8 @@
         }
 
         function openPoemsIndex() {
-            document.getElementById('poem-search').value = '';
+            const searchInput = document.getElementById('poem-search');
+            if (searchInput) searchInput.value = '';
             renderPoemsGrid();
             navigateTo('poems-index-view');
         }
@@ -1111,13 +1371,9 @@
             navigateTo('poem-reading-view');
         }
 
-
-        // ==========================================================
-        // 6. REFLECTIONS & LOGS ENGINE
-        // ==========================================================
-
         function renderNotesGrid() {
             const grid = document.getElementById('notes-grid');
+            if (!grid) return;
             grid.innerHTML = '';
 
             if (NOTES_DATA.length === 0) {
